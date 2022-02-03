@@ -106,6 +106,6 @@
         "log_per_iter": 20,
 
         "val": true,
-        "val_per_epochs": 5
+        "val_per_epochs": 1
     }
 }

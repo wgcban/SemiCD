@@ -119,36 +119,31 @@ class Trainer(BaseTrainer):
         tbar = tqdm(self.val_loader, ncols=130)
         with torch.no_grad():
             val_visual = []
-            for batch_idx, (data, target, target_class) in enumerate(tbar):
-                target, data, target_class = target.cuda(non_blocking=True), data.cuda(non_blocking=True), target_class.cuda(non_blocking=True)
+            for batch_idx, (A, B, target) in enumerate(tbar):
+                target, A, B = target.cuda(non_blocking=True), A.cuda(non_blocking=True), B.cuda(non_blocking=True)
 
                 H, W = target.size(1), target.size(2)
                 up_sizes = (ceil(H / 8) * 8, ceil(W / 8) * 8)
-                pad_h, pad_w = up_sizes[0] - data.size(2), up_sizes[1] - data.size(3)
-                data = F.pad(data, pad=(0, pad_w, 0, pad_h), mode='reflect')
-                output, output_classification = self.model(data)
+                pad_h, pad_w = up_sizes[0] - A.size(2), up_sizes[1] - A.size(3)
+                A = F.pad(A, pad=(0, pad_w, 0, pad_h), mode='reflect')
+                B = F.pad(B, pad=(0, pad_w, 0, pad_h), mode='reflect')
+                output = self.model( A_l=A, B_l=B)
                 output = output[:, :, :H, :W]
 
                 # LOSS
-                loss = F.cross_entropy(output, target, ignore_index=self.ignore_index)
+                loss = F.cross_entropy(output, target)
                 total_loss_val.update(loss.item())
 
-                correct, labeled, inter, union = eval_metrics(output, target, self.num_classes, self.ignore_index)
+                correct, labeled, inter, union = eval_metrics(output, target, self.num_classes)
                 total_inter, total_union = total_inter+inter, total_union+union
                 total_correct, total_label = total_correct+correct, total_label+labeled
 
                 # LIST OF IMAGE TO VIZ (15 images)
                 if len(val_visual) < 15:
-                    if isinstance(data, list): data = data[0]
+                    if isinstance(A, list): A = A[0]
                     target_np = target.data.cpu().numpy()
                     output_np = output.data.max(1)[1].cpu().numpy()
-                    val_visual.append([data[0].data.cpu(), target_np[0], output_np[0]])
-
-                # Classification results
-                output_flood_np = output_classification.max(1)[1].cpu().numpy()
-                target_class_np = target.data.cpu().numpy()
-                N_true_classification += np.sum(np.logical_not(np.logical_xor(output_flood_np, target_class_np)))
-                N_total_images += target.shape[0]
+                    val_visual.append([A[0].data.cpu(), B[0].data.cpu(), target_np[0], output_np[0]])
 
 
                 # PRINT INFO
@@ -158,8 +153,8 @@ class Trainer(BaseTrainer):
                 seg_metrics = {"Pixel_Accuracy": np.round(pixAcc, 3), "Mean_IoU": np.round(mIoU, 3),
                                 "Class_IoU": dict(zip(range(self.num_classes), np.round(IoU, 3)))}
 
-                tbar.set_description('EVAL ({}) | Loss: {:.3f}, PixelAcc: {:.2f}, Mean IoU: {:.2f}, Classification Acc: {:.2f} |'.format( epoch,
-                                                total_loss_val.average, pixAcc, mIoU, N_true_classification/N_total_images))
+                tbar.set_description('EVAL ({}) | Loss: {:.3f}, PixelAcc: {:.2f}, Mean IoU: {:.2f} |'.format( epoch,
+                                                total_loss_val.average, pixAcc, mIoU))
 
             self._add_img_tb(val_visual, 'val')
 
@@ -210,13 +205,13 @@ class Trainer(BaseTrainer):
 
 
     def _compute_metrics(self, outputs, target_l, target_ul, epoch):
-        seg_metrics_l = eval_metrics(outputs['sup_pred'], target_l, self.num_classes, self.ignore_index)
+        seg_metrics_l = eval_metrics(outputs['sup_pred'], target_l, self.num_classes)
         self._update_seg_metrics(*seg_metrics_l, True)
         seg_metrics_l = self._get_seg_metrics(True)
         self.pixel_acc_l, self.mIoU_l, self.class_iou_l = seg_metrics_l.values()
 
         if self.mode == 'semi':
-            seg_metrics_ul = eval_metrics(outputs['unsup_pred'], target_ul, self.num_classes, self.ignore_index)
+            seg_metrics_ul = eval_metrics(outputs['unsup_pred'], target_ul, self.num_classes)
             self._update_seg_metrics(*seg_metrics_ul, False)
             seg_metrics_ul = self._get_seg_metrics(False)
             self.pixel_acc_ul, self.mIoU_ul, self.class_iou_ul = seg_metrics_ul.values()
