@@ -113,11 +113,11 @@ class CCT(BaseModel):
 
         # Supervised loss
         if self.sup_type == 'CE':
-            loss_sup = self.sup_loss(output_l, target_l, ignore_index=self.ignore_index, temperature=self.softmax_temp) * self.sup_loss_w + flood_classify_loss
+            loss_sup = self.sup_loss(output_l, target_l, ignore_index=self.ignore_index, temperature=self.softmax_temp) * self.sup_loss_w 
         elif self.sup_type == 'FL':
             loss_sup = self.sup_loss(output_l,target_l) * self.sup_loss_w
         else:
-            loss_sup = self.sup_loss(output_l, target_l, curr_iter=curr_iter, epoch=epoch, ignore_index=self.ignore_index) * self.sup_loss_w + flood_classify_loss
+            loss_sup = self.sup_loss(output_l, target_l, curr_iter=curr_iter, epoch=epoch, ignore_index=self.ignore_index) * self.sup_loss_w
 
         # If supervised mode only, return
         if self.mode == 'supervised':

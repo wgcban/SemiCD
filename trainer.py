@@ -113,8 +113,6 @@ class Trainer(BaseTrainer):
         total_loss_val = AverageMeter()
         total_inter, total_union = 0, 0
         total_correct, total_label = 0, 0
-        N_true_classification = 0
-        N_total_images = 0
 
         tbar = tqdm(self.val_loader, ncols=130)
         with torch.no_grad():
@@ -127,11 +125,12 @@ class Trainer(BaseTrainer):
                 pad_h, pad_w = up_sizes[0] - A.size(2), up_sizes[1] - A.size(3)
                 A = F.pad(A, pad=(0, pad_w, 0, pad_h), mode='reflect')
                 B = F.pad(B, pad=(0, pad_w, 0, pad_h), mode='reflect')
-                output = self.model( A_l=A, B_l=B)
+                output = self.model(A_l=A, B_l=B)
                 output = output[:, :, :H, :W]
 
                 # LOSS
-                loss = F.cross_entropy(output, target)
+                print()
+                loss = F.cross_entropy(output, target, ignore_index=255)
                 total_loss_val.update(loss.item())
 
                 correct, labeled, inter, union = eval_metrics(output, target, self.num_classes)

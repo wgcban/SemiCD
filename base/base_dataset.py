@@ -83,7 +83,7 @@ class BaseDataSet(Dataset):
         if pad_h > 0 or pad_w > 0:
             image_A = cv2.copyMakeBorder(image_A, value=self.image_padding, **pad_kwargs)
             image_B = cv2.copyMakeBorder(image_B, value=self.image_padding, **pad_kwargs)
-            label = cv2.copyMakeBorder(label, value=self.ignore_index, **pad_kwargs)
+            label   = cv2.copyMakeBorder(label, value=0, **pad_kwargs) #use 0 for padding
 
         # Cropping 
         h, w, _ = image_A.shape
@@ -188,7 +188,7 @@ class BaseDataSet(Dataset):
         elif self.augment:
             image_A, image_B, label = self._augmentation(image_A, image_B, label)
 
-        label[label==255.0] = 1
+        label[label>=1] = 1
         label = torch.from_numpy(np.array(label, dtype=np.int32)).long()
 
         return image_A, image_B, label

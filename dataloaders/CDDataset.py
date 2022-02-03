@@ -44,7 +44,6 @@ class ImageDataset(BaseDataSet):
         else:
             label_path = os.path.join(self.root, 'label', self.files[index])
         label = np.asarray(Image.open(label_path), dtype=np.int32)
-        label[label==255] = 1
         return image_A, image_B, label, image_id
 
 class CDDataset(BaseDataLoader):
