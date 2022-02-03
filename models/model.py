@@ -12,12 +12,12 @@ from utils.losses import CE_loss
 from models.classification import flood_classify
 
 class CCT(BaseModel):
-    def __init__(self, num_classes, conf, sup_loss=None, cons_w_unsup=None, ignore_index=None, testing=False,
+    def __init__(self, num_classes, conf, sup_loss=None, cons_w_unsup=None, testing=False,
             pretrained=True, use_weak_lables=False, weakly_loss_w=0.4):
 
         self.num_classes = num_classes
         if not testing:
-            assert (ignore_index is not None) and (sup_loss is not None) and (cons_w_unsup is not None)
+            assert (sup_loss is not None) and (cons_w_unsup is not None)
 
         super(CCT, self).__init__()
         assert int(conf['supervised']) + int(conf['semi']) == 1, 'one mode only'
@@ -27,7 +27,6 @@ class CCT(BaseModel):
             self.mode = 'semi'
 
         # Supervised and unsupervised losses
-        self.ignore_index = ignore_index
         if conf['un_loss'] == "KL":
         	self.unsuper_loss = softmax_kl_loss
         elif conf['un_loss'] == "MSE":
@@ -113,11 +112,11 @@ class CCT(BaseModel):
 
         # Supervised loss
         if self.sup_type == 'CE':
-            loss_sup = self.sup_loss(output_l, target_l, ignore_index=self.ignore_index, temperature=self.softmax_temp) * self.sup_loss_w 
+            loss_sup = self.sup_loss(output_l, target_l, temperature=self.softmax_temp) * self.sup_loss_w 
         elif self.sup_type == 'FL':
             loss_sup = self.sup_loss(output_l,target_l) * self.sup_loss_w
         else:
-            loss_sup = self.sup_loss(output_l, target_l, curr_iter=curr_iter, epoch=epoch, ignore_index=self.ignore_index) * self.sup_loss_w
+            loss_sup = self.sup_loss(output_l, target_l, curr_iter=curr_iter, epoch=epoch) * self.sup_loss_w
 
         # If supervised mode only, return
         if self.mode == 'supervised':
@@ -163,8 +162,7 @@ class CCT(BaseModel):
             
             if self.use_weak_lables:
                 weight_w = (weight_u / self.unsup_loss_w.final_w) * self.weakly_loss_w
-                #loss_weakly = sum([CE_loss(outp, target_ul, ignore_index=self.ignore_index) for outp in outputs_ul]) / len(outputs_ul)
-                loss_weakly = sum([CE_loss(outp, target_ul, ignore_index=self.ignore_index) for outp in outputs_ul_reshaped]) / len(outputs_ul_reshaped)
+                loss_weakly = sum([CE_loss(outp, target_ul) for outp in outputs_ul_reshaped]) / len(outputs_ul_reshaped)
                 loss_weakly = loss_weakly * weight_w
                 curr_losses['loss_weakly'] = loss_weakly
                 total_loss += loss_weakly

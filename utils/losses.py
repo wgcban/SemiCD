@@ -27,8 +27,8 @@ class consistency_weight(object):
         return self.final_w * self.current_rampup
 
 
-def CE_loss(input_logits, target_targets, ignore_index, temperature=1):
-    return F.cross_entropy(input_logits/temperature, target_targets, ignore_index=ignore_index)
+def CE_loss(input_logits, target_targets, temperature=1):
+    return F.cross_entropy(input_logits/temperature, target_targets)
 
 # for FocalLoss
 def softmax_helper(x):
