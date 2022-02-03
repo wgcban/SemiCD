@@ -85,28 +85,13 @@ class CCT(BaseModel):
 
     def forward(self, A_l=None, B_l=None, target_l=None, A_ul=None, B_ul=None, target_ul=None, curr_iter=None, epoch=None):
         if not self.training:
-            za_l = self.encoder(A_l)
-            zb_l = self.encoder(B_l)
-            z_l = torch.abs(za_l-zb_l)
-            outputs = [aux_decoder(z_l, target_l, pertub=False) for aux_decoder in self.aux_decoders] 
-            output = torch.mean(torch.stack(outputs),0)
-            return output
+            return self.main_decoder(torch.abs(self.encoder(A_l)-self.encoder(B_l)))
 
         # We compute the losses in the forward pass to avoid problems encountered in muti-gpu 
 
         # Forward pass the labels example
         input_size = (A_l.size(2), A_l.size(3))
-        za_l = self.encoder(A_l)
-        zb_l = self.encoder(B_l)
-        z_l = torch.abs(za_l-zb_l)
-
-        # Get predictions from decorders... (No perturbations are applied for labled examples)
-        outputs_l = [aux_decoder(z_l, target_l, pertub=False) for aux_decoder in self.aux_decoders]
-        
-        # Taking the average prediction accross all decorder predictions...
-        output_l = torch.mean(torch.stack(outputs_l), 0)
-
-        # Interpolate output_l to original size...
+        output_l = self.main_decoder(torch.abs(self.encoder(A_l)-self.encoder(B_l)))
         if output_l.shape != A_l.shape:
             output_l = F.interpolate(output_l, size=input_size, mode='bilinear', align_corners=True)
 
@@ -128,9 +113,7 @@ class CCT(BaseModel):
         # If semi supervised mode
         elif self.mode == 'semi':
             # Get main prediction
-            a_ul = self.encoder(A_ul)
-            b_ul = self.encoder(B_ul)
-            x_ul = torch.abs(a_ul-b_ul)
+            x_ul = torch.abs(self.encoder(A_ul)-self.encoder(B_ul))
             output_ul = self.main_decoder(x_ul)
 
             # Get auxiliary predictions
@@ -144,7 +127,7 @@ class CCT(BaseModel):
             loss_unsup = (loss_unsup / len(outputs_ul))
             curr_losses = {'loss_sup': loss_sup}
 
-            if output_ul.shape != A_l.shape:
+            if output_ul.shape != A_ul.shape:
                 output_ul = F.interpolate(output_ul, size=input_size, mode='bilinear', align_corners=True)
             outputs = {'sup_pred': output_l, 'unsup_pred': output_ul}
 

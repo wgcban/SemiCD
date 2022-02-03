@@ -55,10 +55,10 @@ class Trainer(BaseTrainer):
 
         if self.mode == 'supervised':
             dataloader = iter(self.supervised_loader)
-            tbar = tqdm(range(len(self.supervised_loader)), ncols=135)
+            tbar = tqdm(range(len(self.supervised_loader)), ncols=100)
         else:
             dataloader = iter(zip(cycle(self.supervised_loader), self.unsupervised_loader))
-            tbar = tqdm(range(len(self.unsupervised_loader)), ncols=135)
+            tbar = tqdm(range(len(self.unsupervised_loader)), ncols=100)
 
         self._reset_metrics()
         for batch_idx in tbar:
@@ -92,9 +92,9 @@ class Trainer(BaseTrainer):
             del A_l, B_l, target_l, A_ul, B_ul, target_ul
             del total_loss, cur_losses, outputs
             
-            tbar.set_description('T ({}) | Ls {:.2f} Lu {:.2f} Lw {:.2f} PW {:.2f} m1 {:.2f} m2 {:.2f}|'.format(
+            tbar.set_description('T ({}) | Ls {:.2f} Lu {:.2f} Lw {:.2f} PW {:.2f} IoU(change-l) {:.2f} IoU(change-ul) {:.2f}|'.format(
                 epoch, self.loss_sup.average, self.loss_unsup.average, self.loss_weakly.average,
-                self.pair_wise.average, self.mIoU_l, self.mIoU_ul))
+                self.pair_wise.average, self.class_iou_l[1], self.class_iou_ul[1]))
 
             self.lr_scheduler.step(epoch=epoch-1)
 
@@ -152,8 +152,8 @@ class Trainer(BaseTrainer):
                 seg_metrics = {"Pixel_Accuracy": np.round(pixAcc, 3), "Mean_IoU": np.round(mIoU, 3),
                                 "Class_IoU": dict(zip(range(self.num_classes), np.round(IoU, 3)))}
 
-                tbar.set_description('EVAL ({}) | Loss: {:.3f}, PixelAcc: {:.2f}, Mean IoU: {:.2f} |'.format( epoch,
-                                                total_loss_val.average, pixAcc, mIoU))
+                tbar.set_description('EVAL ({}) | Loss: {:.3f}, PixelAcc: {:.2f}, IoU(no-change): {:.2f}, IoU(change): {:.2f} |'.format( epoch,
+                                                total_loss_val.average, pixAcc, IoU[0], IoU[1]))
 
             self._add_img_tb(val_visual, 'val')
 
@@ -244,7 +244,6 @@ class Trainer(BaseTrainer):
             "Mean_IoU": np.round(mIoU, 3),
             "Class_IoU": dict(zip(range(self.num_classes), np.round(IoU, 3)))
         }
-
 
 
     def _log_values(self, cur_losses):
