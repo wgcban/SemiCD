@@ -26,7 +26,7 @@ class Trainer(BaseTrainer):
         self.unsupervised_loader = unsupervised_loader
         self.val_loader = val_loader
 
-        self.ignore_index = self.val_loader.dataset.ignore_index
+        self.ignore_index = -100
         self.wrt_mode, self.wrt_step = 'train_', 0
         self.log_step = config['trainer'].get('log_per_iter', int(np.sqrt(self.val_loader.batch_size)))
         if config['trainer']['log_per_iter']:
