@@ -72,10 +72,10 @@ def upsample(in_channels, out_channels, upscale, kernel_size=3):
     layers.append(up)
 
     #Classification layer
-    conv1x1 = nn.Conv2d(in_channels, out_channels, kernel_size=1, bias=False)
+    conv1x1 = nn.Conv2d(mid_channels, out_channels, kernel_size=1, bias=False)
     nn.init.kaiming_normal_(conv1x1.weight.data, nonlinearity='relu')
     layers.append(conv1x1)
-    
+
     return nn.Sequential(*layers)
 
 
