@@ -1,6 +1,6 @@
 {
     "name": "SemiCD",
-    "experim_name": "SemiCD_v1",
+    "experim_name": "SemiCD_v2",
     "n_gpu": 1,
     "n_labeled_examples": 1400,
     "diff_lrs": true,
@@ -12,8 +12,8 @@
     "pretrained": true,
 
     "model":{
-        "supervised": true,
-        "semi": false,
+        "supervised": false,
+        "semi": true,
         "supervised_w": 1,
 
         "sup_loss": "CE",
