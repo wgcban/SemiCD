@@ -92,7 +92,6 @@ class CCT(BaseModel):
         # Forward pass the labels example
         input_size = (A_l.size(2), A_l.size(3))
         output_l = self.main_decoder(self.encoder(A_l, B_l))
-        print(output_l.shape)
         if output_l.shape != A_l.shape:
             output_l = F.interpolate(output_l, size=input_size, mode='bilinear', align_corners=True)
 
