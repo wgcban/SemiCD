@@ -16,7 +16,7 @@
         "semi": true,
         "supervised_w": 1,
 
-        "sup_loss": "CE",
+        "sup_loss": "FL",
         "un_loss": "MSE",
 
         "softmax_temp": 1,
@@ -55,7 +55,7 @@
 
     "train_supervised": {
         "data_dir": "/media/lidan/ssd2/CDData/LEVIR-CD256",
-        "batch_size": 16,
+        "batch_size": 32,
         "crop_size": 256,
         "shuffle": true,
         "base_size": 256,
@@ -71,7 +71,7 @@
     "train_unsupervised": {
         "data_dir": "/media/lidan/ssd2/CDData/LEVIR-CD256",
         "weak_labels_output": "pseudo_labels",
-        "batch_size": 16,
+        "batch_size": 32,
         "crop_size": 256,
         "shuffle": true,
         "base_size": 256,
