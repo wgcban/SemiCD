@@ -85,13 +85,13 @@ class CCT(BaseModel):
 
     def forward(self, A_l=None, B_l=None, target_l=None, A_ul=None, B_ul=None, target_ul=None, curr_iter=None, epoch=None):
         if not self.training:
-            return self.main_decoder(torch.abs(self.encoder(A_l)-self.encoder(B_l)))
+            return self.main_decoder(self.encoder(A_l-B_l))
 
         # We compute the losses in the forward pass to avoid problems encountered in muti-gpu 
 
         # Forward pass the labels example
         input_size = (A_l.size(2), A_l.size(3))
-        output_l = self.main_decoder(torch.abs(self.encoder(A_l)-self.encoder(B_l)))
+        output_l = self.main_decoder(self.encoder(A_l-B_l))
         if output_l.shape != A_l.shape:
             output_l = F.interpolate(output_l, size=input_size, mode='bilinear', align_corners=True)
 
