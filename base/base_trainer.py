@@ -88,7 +88,7 @@ class BaseTrainer:
 
     def train(self):
         for epoch in range(self.start_epoch, self.epochs+1):
-            #results = self._train_epoch(epoch)
+            results = self._train_epoch(epoch)
             if self.do_validation and epoch % self.config['trainer']['val_per_epochs'] == 0:
                 results = self._valid_epoch(epoch)
                 self.logger.info('\n\n')
