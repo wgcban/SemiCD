@@ -113,7 +113,7 @@ class CCT(BaseModel):
         # If semi supervised mode
         elif self.mode == 'semi':
             # Get main prediction
-            x_ul = torch.abs(self.encoder(A_ul)-self.encoder(B_ul))
+            x_ul      = self.encoder(A_ul, B_ul)
             output_ul = self.main_decoder(x_ul)
 
             # Get auxiliary predictions
