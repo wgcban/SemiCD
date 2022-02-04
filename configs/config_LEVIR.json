@@ -12,11 +12,11 @@
     "pretrained": true,
 
     "model":{
-        "supervised": false,
-        "semi": true,
+        "supervised": true,
+        "semi": false,
         "supervised_w": 1,
 
-        "sup_loss": "FL",
+        "sup_loss": "CE",
         "un_loss": "MSE",
 
         "softmax_temp": 1,
