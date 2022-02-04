@@ -56,9 +56,10 @@ class Encoder(nn.Module):
         )
         self.psp = _PSPModule(2048, bin_sizes=[1, 2, 3, 6])
 
-    def forward(self, x):
-        x = self.base(x)
-        x = self.psp(x)
+    def forward(self, A, B):
+        a = self.base(A)
+        b = self.base(B)
+        x = self.psp(torch.abs(a-b))
         return x
 
     def get_backbone_params(self):
