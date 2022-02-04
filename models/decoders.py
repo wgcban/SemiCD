@@ -55,9 +55,10 @@ class PixelShuffle(nn.Module):
 def upsample(in_channels, out_channels, upscale, kernel_size=3):
     layers = []
     up      = nn.Upsample(scale_factor=upscale, mode='bilinear')
+    layers.append(up)
     conv1x1 = nn.Conv2d(in_channels, out_channels, kernel_size=1, bias=False)
     nn.init.kaiming_normal_(conv1x1.weight.data, nonlinearity='relu')
-    layers.append(up, conv1x1)
+    layers.append(conv1x1)
     return nn.Sequential(*layers)
 
 
