@@ -91,8 +91,8 @@ class CCT(BaseModel):
 
         # Forward pass the labels example
         input_size = (A_l.size(2), A_l.size(3))
-        A_l = F.pad(A_l, (3,3,3,3))
-        B_l = F.pad(B_l, (3,3,3,3))
+        A_l = F.pad(A_l, (8,8,8,8))
+        B_l = F.pad(B_l, (8,8,8,8))
         output_l = self.main_decoder(self.encoder(A_l, B_l))
         print(output_l.shape)
         if output_l.shape != A_l.shape:
