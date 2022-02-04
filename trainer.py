@@ -91,10 +91,15 @@ class Trainer(BaseTrainer):
 
             del A_l, B_l, target_l, A_ul, B_ul, target_ul
             del total_loss, cur_losses, outputs
-            
-            tbar.set_description('T ({}) | Ls {:.2f} Lu {:.2f} Lw {:.2f} PW {:.2f} IoU(change-l) {:.2f} IoU(change-ul) {:.2f}|'.format(
+
+            if self.mode == 'supervised':
+                tbar.set_description('T ({}) | Ls {:.2f} Lu {:.2f} Lw {:.2f} PW {:.2f} IoU(change-l) {:.2f} IoU(change-ul) {:.2f}|'.format(
                 epoch, self.loss_sup.average, self.loss_unsup.average, self.loss_weakly.average,
                 self.pair_wise.average, self.class_iou_l[1], self.class_iou_ul[1]))
+            else:
+                tbar.set_description('T ({}) | Ls {:.2f} Lu {:.2f} Lw {:.2f} PW {:.2f} IoU(change-l)|'.format(
+                epoch, self.loss_sup.average, self.loss_unsup.average, self.loss_weakly.average,
+                self.pair_wise.average, self.class_iou_l[1]))
 
             self.lr_scheduler.step(epoch=epoch-1)
 
