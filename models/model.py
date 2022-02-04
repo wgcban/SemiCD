@@ -62,7 +62,7 @@ class CCT(BaseModel):
         self.main_decoder = MainDecoder(upscale, decoder_in_ch, num_classes=num_classes)
 
         # The auxilary decoders
-        if self.mode == 'supervised' or self.mode == 'semi' or self.mode == 'weakly_semi':
+        if self.mode == 'semi' or self.mode == 'weakly_semi':
             vat_decoder = [VATDecoder(upscale, decoder_in_ch, num_classes, xi=conf['xi'],
             							eps=conf['eps']) for _ in range(conf['vat'])]
             drop_decoder = [DropOutDecoder(upscale, decoder_in_ch, num_classes,
