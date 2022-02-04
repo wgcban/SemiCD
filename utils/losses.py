@@ -186,7 +186,8 @@ class abCE_loss(nn.Module):
         current_rampup = self.rampup_func(cur_total_iter, self.total_num_iters)
         return current_rampup * (self.end - self.start) + self.start
 
-    def forward(self, predict, target, ignore_index, curr_iter, epoch):
+    def forward(self, predict, target, curr_iter, epoch):
+        ignore_index=-100
         batch_kept = self.min_kept * target.size(0)
         prob_out = F.softmax(predict, dim=1)
         tmp_target = target.clone()
