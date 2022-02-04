@@ -59,7 +59,8 @@ class Encoder(nn.Module):
     def forward(self, A, B):
         a = self.base(A)
         b = self.base(B)
-        x = self.psp(torch.abs(a-b))
+        diff = 1 - a*b/(torch.abs(a)*torch.abs(b))
+        x = self.psp(diff)
         return x
 
     def get_backbone_params(self):
