@@ -59,7 +59,7 @@ def upsample(in_channels, out_channels, upscale, kernel_size=3):
     mid_channels = 32
 
     #First conv layer to reduce number of channels
-    diff_conv1x1 = nn.Conv2d(in_channels, mid_channels, kernel_size=kernel_size, bias=False)
+    diff_conv1x1 = nn.Conv2d(in_channels, mid_channels, kernel_size=kernel_size, padding=1, bias=False)
     nn.init.kaiming_normal_(diff_conv1x1.weight.data, nonlinearity='relu')
     layers.append(diff_conv1x1)
 
