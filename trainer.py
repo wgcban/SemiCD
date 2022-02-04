@@ -134,7 +134,6 @@ class Trainer(BaseTrainer):
                 output = output[:, :, :H, :W]
 
                 # LOSS
-                print(output.shape)
                 loss = F.cross_entropy(output, target)
                 total_loss_val.update(loss.item())
 
