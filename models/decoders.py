@@ -54,11 +54,28 @@ class PixelShuffle(nn.Module):
 
 def upsample(in_channels, out_channels, upscale, kernel_size=3):
     layers = []
+
+    # Middle channels
+    mid_channels = 32
+
+    #First conv layer to reduce number of channels
+    diff_conv1x1 = nn.Conv2d(in_channels, mid_channels, kernel_size=kernel_size, bias=False)
+    nn.init.kaiming_normal_(diff_conv1x1.weight.data, nonlinearity='relu')
+    layers.append(diff_conv1x1)
+
+    #ReLU
+    diff_relu = nn.ReLU()
+    layers.append(diff_relu)
+
+    #Upsampling to original size
     up      = nn.Upsample(scale_factor=upscale, mode='bilinear')
     layers.append(up)
+
+    #Classification layer
     conv1x1 = nn.Conv2d(in_channels, out_channels, kernel_size=1, bias=False)
     nn.init.kaiming_normal_(conv1x1.weight.data, nonlinearity='relu')
     layers.append(conv1x1)
+    
     return nn.Sequential(*layers)
 
 
