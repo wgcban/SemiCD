@@ -190,7 +190,6 @@ class BaseDataSet(Dataset):
 
         label[label>=1] = 1
         label = torch.from_numpy(np.array(label, dtype=np.int32)).long()
-
         return image_A, image_B, label
 
     def __repr__(self):
