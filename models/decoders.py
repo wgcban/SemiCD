@@ -42,14 +42,22 @@ class PixelShuffle(nn.Module):
         return x
 
 
+# def upsample(in_channels, out_channels, upscale, kernel_size=3):
+#     # A series of x 2 upsamling until we get to the upscale we want
+#     layers = []
+#     conv1x1 = nn.Conv2d(in_channels, out_channels, kernel_size=1, bias=False)
+#     nn.init.kaiming_normal_(conv1x1.weight.data, nonlinearity='relu')
+#     layers.append(conv1x1)
+#     for i in range(int(math.log(upscale, 2))):
+#         layers.append(PixelShuffle(out_channels, scale=2))
+#     return nn.Sequential(*layers)
+
 def upsample(in_channels, out_channels, upscale, kernel_size=3):
-    # A series of x 2 upsamling until we get to the upscale we want
     layers = []
+    up      = nn.Upsample(scale_factor=upscale, mode='bilinear')
     conv1x1 = nn.Conv2d(in_channels, out_channels, kernel_size=1, bias=False)
     nn.init.kaiming_normal_(conv1x1.weight.data, nonlinearity='relu')
-    layers.append(conv1x1)
-    for i in range(int(math.log(upscale, 2))):
-        layers.append(PixelShuffle(out_channels, scale=2))
+    layers.append(up, conv1x1)
     return nn.Sequential(*layers)
 
 

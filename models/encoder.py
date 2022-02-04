@@ -59,7 +59,7 @@ class Encoder(nn.Module):
     def forward(self, A, B):
         a = self.base(A)
         b = self.base(B)
-        diff = 1 - a*b/(torch.abs(a)*torch.abs(b)+1e-6)
+        diff = torch.abs(a-b)
         x = self.psp(diff)
         return x
 

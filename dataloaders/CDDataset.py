@@ -48,12 +48,12 @@ class ImageDataset(BaseDataSet):
 
 class CDDataset(BaseDataLoader):
     def __init__(self, kwargs):
-        self.MEAN = [0.485, 0.456, 0.406]
-        self.STD = [0.229, 0.224, 0.225]
+        self.MEAN = [0.5, 0.5, 0.5]
+        self.STD = [0.5, 0.5, 0.5]
         self.batch_size = kwargs.pop('batch_size')
         kwargs['mean'] = self.MEAN
         kwargs['std'] = self.STD
-        kwargs['ignore_index'] = 255
+        
         try:
             shuffle = kwargs.pop('shuffle')
         except:
