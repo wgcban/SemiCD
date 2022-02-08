@@ -18,7 +18,7 @@ def get_instance(module, name, config, *args):
 def main(config, resume):
     torch.manual_seed(42)
     train_logger = Logger()
-
+    
     # DATA LOADERS
     config['train_supervised']['n_labeled_examples'] = config['n_labeled_examples']
     config['train_unsupervised']['n_labeled_examples'] = config['n_labeled_examples']
