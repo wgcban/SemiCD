@@ -29,8 +29,6 @@ class ImageDataset(BaseDataSet):
         if img_name_list.ndim == 2:
             return img_name_list[:, 0]
 
-        #file_list = [line.rstrip().split('\n') for line in tuple(open(file_list, "r"))]
-        #self.files = list(zip(*file_list))
         self.files = img_name_list
 
     def _load_data(self, index):
