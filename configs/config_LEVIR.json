@@ -1,6 +1,6 @@
 {
     "name": "SemiCD",
-    "experim_name": "SemiCD_v3",
+    "experim_name": "SemiCD_v1",
     "n_gpu": 1,
     "n_labeled_examples": 1400,
     "diff_lrs": true,
