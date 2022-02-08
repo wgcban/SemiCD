@@ -9,7 +9,6 @@ from utils.losses import *
 from models.decoders import *
 from models.encoder import Encoder
 from utils.losses import CE_loss
-from models.classification import flood_classify
 
 class CCT(BaseModel):
     def __init__(self, num_classes, conf, sup_loss=None, cons_w_unsup=None, testing=False,
