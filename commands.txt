@@ -1,9 +1,9 @@
 Training====
-python train_flood.py --config configs/config_flood.json
+python train_semicd.py
 
 
 Validation====
-CUDA_VISIBLE_DEVICES=1 python inference_flood.py --config ./saved/CCT/config.json --model ./saved/CCT/best_model.pth --images ./Val_Images/
+python train_semicd.py
 
 
 Changes:
