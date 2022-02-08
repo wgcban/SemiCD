@@ -1,6 +1,6 @@
 {
     "name": "SemiCD - (only supervised samples)",
-    "experim_name": "SemiCD_v1",
+    "experim_name": "SemiCD_test",
     "n_gpu": 1,
     "n_labeled_examples": 1400,
     "diff_lrs": true,

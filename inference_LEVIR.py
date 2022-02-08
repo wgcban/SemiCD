@@ -97,7 +97,7 @@ def main():
     # MODEL
     config['model']['supervised'] = True; 
     config['model']['semi'] = False
-    model = models.CCT(num_classes=num_classes, conf=config['model'], testing=True)
+    model = models.Consistency_ResNet50_CD(num_classes=num_classes, conf=config['model'], testing=True)
     checkpoint = torch.load(args.model)
     model = torch.nn.DataParallel(model)
     try:
