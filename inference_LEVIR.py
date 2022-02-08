@@ -23,6 +23,9 @@ from pathlib import Path
 from utils.metrics import eval_metrics, AverageMeter
 from utils.htmlwriter import HTML
 from matplotlib import pyplot as plt
+from utils.helpers import DeNormalize
+import time
+
 
 class testDataset(Dataset):
     def __init__(self, Dataset_Path):
@@ -30,7 +33,7 @@ class testDataset(Dataset):
         std     = [0.229, 0.224, 0.225]
         self.Dataset_Path = Dataset_Path
 
-        file_list       = os.path.join(self.Dataset_Path, 'list', "val.txt")
+        file_list       = os.path.join(self.Dataset_Path, 'list', "train.txt")
         self.filelist   = np.loadtxt(file_list, dtype=str)
         if self.filelist.ndim == 2:
             return self.filelist[:, 0]
@@ -95,9 +98,10 @@ def main():
     palette     = get_voc_pallete(num_classes)
 
     # MODEL
-    config['model']['supervised'] = True; 
+    config['model']['supervised'] = True
     config['model']['semi'] = False
     model = models.Consistency_ResNet50_CD(num_classes=num_classes, conf=config['model'], testing=True)
+    print(f'\n{model}\n')
     checkpoint = torch.load(args.model)
     model = torch.nn.DataParallel(model)
     try:

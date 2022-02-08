@@ -55,10 +55,10 @@ class Trainer(BaseTrainer):
 
         if self.mode == 'supervised':
             dataloader = iter(self.supervised_loader)
-            tbar = tqdm(range(len(self.supervised_loader)), ncols=120)
+            tbar = tqdm(range(len(self.supervised_loader)), ncols=100)
         else:
             dataloader = iter(zip(cycle(self.supervised_loader), self.unsupervised_loader))
-            tbar = tqdm(range(len(self.unsupervised_loader)), ncols=120)
+            tbar = tqdm(range(len(self.unsupervised_loader)), ncols=100)
 
         self._reset_metrics()
         for batch_idx in tbar:
@@ -119,7 +119,7 @@ class Trainer(BaseTrainer):
         total_inter, total_union = 0, 0
         total_correct, total_label = 0, 0
 
-        tbar = tqdm(self.val_loader, ncols=130)
+        tbar = tqdm(self.val_loader, ncols=100)
         with torch.no_grad():
             val_visual = []
             for batch_idx, (A, B, target) in enumerate(tbar):
