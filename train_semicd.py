@@ -44,7 +44,7 @@ def main(config, resume):
     cons_w_unsup = consistency_weight(final_w=config['unsupervised_w'], iters_per_epoch=len(unsupervised_loader),
                                         rampup_ends=rampup_ends)
 
-    model = models.CCT(num_classes=val_loader.dataset.num_classes, conf=config['model'],
+    model = models.Consistency_ResNet50_CD(num_classes=val_loader.dataset.num_classes, conf=config['model'],
     						sup_loss=sup_loss, cons_w_unsup=cons_w_unsup,
     						weakly_loss_w=config['weakly_loss_w'], use_weak_lables=config['use_weak_lables'])
     print(f'\n{model}\n')
