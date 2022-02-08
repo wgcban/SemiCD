@@ -132,7 +132,7 @@ class Trainer(BaseTrainer):
                 B = F.pad(B, pad=(0, pad_w, 0, pad_h), mode='reflect')
                 output = self.model(A_l=A, B_l=B)
                 output = output[:, :, :H, :W]
-
+                
                 # LOSS
                 loss = F.cross_entropy(output, target)
                 total_loss_val.update(loss.item())

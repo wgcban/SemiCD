@@ -50,7 +50,7 @@ def initialize_weights(*models):
 def colorize_mask(mask, palette):
     zero_pad = 256 * 3 - len(palette)
     for i in range(zero_pad):
-                    palette.append(0)
+        palette.append(0)
     palette[-3:] = [255, 255, 255]
     new_mask = PIL.Image.fromarray(mask.astype(np.uint8)).convert('P')
     new_mask.putpalette(palette)

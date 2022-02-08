@@ -22,15 +22,15 @@ from PIL import Image
 from pathlib import Path
 from utils.metrics import eval_metrics, AverageMeter
 from utils.htmlwriter import HTML
+from matplotlib import pyplot as plt
 
 class testDataset(Dataset):
     def __init__(self, Dataset_Path):
-        mean = [0.485, 0.456, 0.406]
-        std = [0.229, 0.224, 0.225]
+        mean    = [0.485, 0.456, 0.406]
+        std     = [0.229, 0.224, 0.225]
         self.Dataset_Path = Dataset_Path
 
-        #Getting testing image set
-        file_list       = os.path.join(self.Dataset_Path, 'list', "test.txt")
+        file_list       = os.path.join(self.Dataset_Path, 'list', "val.txt")
         self.filelist   = np.loadtxt(file_list, dtype=str)
         if self.filelist.ndim == 2:
             return self.filelist[:, 0]
@@ -51,19 +51,17 @@ class testDataset(Dataset):
         label           = np.asarray(Image.open(label_path), dtype=np.int32)
         image_id        = self.filelist[index].split("/")[-1].split(".")[0]
 
-
         image_A = self.normalize(self.to_tensor(image_A))
         image_B = self.normalize(self.to_tensor(image_B))
         return image_A, image_B, label, image_id
 
-def multi_scale_predict(model, image_A, image_B, scales, num_classes, flip=True):
-    H, W = (image_A.size(2), image_A.size(3))
-    upsize = (ceil(H / 8) * 8, ceil(W / 8) * 8)
-    upsample = nn.Upsample(size=upsize, mode='bilinear', align_corners=True)
-    pad_h, pad_w = upsize[0] - H, upsize[1] - W
-    
-    image_A = F.pad(image_A, pad=(0, pad_w, 0, pad_h), mode='reflect')
-    image_B = F.pad(image_B, pad=(0, pad_w, 0, pad_h), mode='reflect')
+def multi_scale_predict(model, image_A, image_B, scales, num_classes, flip=False):
+    H, W        = (image_A.size(2), image_A.size(3))
+    upsize      = (ceil(H / 8) * 8, ceil(W / 8) * 8)
+    upsample    = nn.Upsample(size=upsize, mode='bilinear', align_corners=True)
+    pad_h, pad_w= upsize[0] - H, upsize[1] - W
+    image_A     = F.pad(image_A, pad=(0, pad_w, 0, pad_h), mode='reflect')
+    image_B     = F.pad(image_B, pad=(0, pad_w, 0, pad_h), mode='reflect')
 
     total_predictions = np.zeros((num_classes, image_A.shape[2], image_A.shape[3]))
 
@@ -71,7 +69,7 @@ def multi_scale_predict(model, image_A, image_B, scales, num_classes, flip=True)
         scaled_img_A = F.interpolate(image_A, scale_factor=scale, mode='bilinear', align_corners=False)
         scaled_img_B = F.interpolate(image_B, scale_factor=scale, mode='bilinear', align_corners=False)
         scaled_prediction = upsample(model(A_l=scaled_img_A, B_l=scaled_img_B))
-
+        
         if flip:
             fliped_img_A = scaled_img_A.flip(-1)
             fliped_img_B = scaled_img_B.flip(-1)
@@ -92,14 +90,14 @@ def main():
 
     # DATA
     testdataset = testDataset(args.Dataset_Path)
-    loader = DataLoader(testdataset, batch_size=1, shuffle=False, num_workers=1)
+    loader      = DataLoader(testdataset, batch_size=1, shuffle=False, num_workers=1)
     num_classes = 2
-    palette = get_voc_pallete(num_classes)
+    palette     = get_voc_pallete(num_classes)
 
     # MODEL
-    config['model']['supervised'] = True; config['model']['semi'] = False
-    model = models.CCT(num_classes=num_classes,
-                        conf=config['model'], testing=True)
+    config['model']['supervised'] = True; 
+    config['model']['semi'] = False
+    model = models.CCT(num_classes=num_classes, conf=config['model'], testing=True)
     checkpoint = torch.load(args.model)
     model = torch.nn.DataParallel(model)
     try:
@@ -128,7 +126,7 @@ def main():
         image_A = image_A.cuda()
         image_B = image_B.cuda()
         label   = label.cuda()
-
+        
         # PREDICT
         with torch.no_grad():
             output = multi_scale_predict(model, image_A, image_B, scales, num_classes)
@@ -145,7 +143,6 @@ def main():
         pixAcc = 1.0 * total_correct / (np.spacing(1) + total_label)
         IoU = 1.0 * total_inter / (np.spacing(1) + total_union)
         tbar.set_description('Test Results | PixelAcc: {:.2f}, IoU(no-change): {:.2f}, IoU(change): {:.2f} |'.format(pixAcc, IoU[0], IoU[1]))
-
 
         # SAVE RESULTS
         prediction_im = colorize_mask(prediction, palette)
@@ -172,7 +169,7 @@ def parse_arguments():
                         help='Path to the trained .pth model')
     parser.add_argument( '--save', action='store_true', help='Save images')
     parser.add_argument('--Dataset_Path', default="/media/lidan/ssd2/CDData/LEVIR-CD256", type=str,
-                        help='Path to dataset (LEVIR-CD or DSFIN-CD)')
+                        help='Path to dataset LEVIR-CD')
     args = parser.parse_args()
     return args
 
