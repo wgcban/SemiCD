@@ -101,6 +101,7 @@ def main():
     checkpoint = torch.load(args.model)
     model = torch.nn.DataParallel(model)
     try:
+        print("Loading the state dictionery...")
         model.load_state_dict(checkpoint['state_dict'], strict=True)
     except Exception as e:
         print(f'Some modules are missing: {e}')
@@ -127,7 +128,7 @@ def main():
         image_B = image_B.cuda()
         label   = label.cuda()
         
-        # PREDICT
+        #PREDICT
         with torch.no_grad():
             output = multi_scale_predict(model, image_A, image_B, scales, num_classes)
         prediction = np.asarray(np.argmax(output, axis=0), dtype=np.uint8)
@@ -144,7 +145,7 @@ def main():
         IoU = 1.0 * total_inter / (np.spacing(1) + total_union)
         tbar.set_description('Test Results | PixelAcc: {:.2f}, IoU(no-change): {:.2f}, IoU(change): {:.2f} |'.format(pixAcc, IoU[0], IoU[1]))
 
-        # SAVE RESULTS
+        #SAVE RESULTS
         prediction_im = colorize_mask(prediction, palette)
         prediction_im.save('/media/lidan/ssd2/SemiCD/outputs/'+config["experim_name"]+'/'+image_id[0]+'.png')
     
