@@ -32,15 +32,15 @@ class ImageDataset(BaseDataSet):
         self.files = img_name_list
 
     def _load_data(self, index):
-        image_A_path = os.path.join(self.root, 'A', self.files[index])
-        image_B_path = os.path.join(self.root, 'B', self.files[index])
-        image_A = np.asarray(Image.open(image_A_path), dtype=np.float32)
-        image_B = np.asarray(Image.open(image_B_path), dtype=np.float32)
-        image_id = self.files[index].split("/")[-1].split(".")[0]
+        image_A_path    = os.path.join(self.root, 'A', self.files[index])
+        image_B_path    = os.path.join(self.root, 'B', self.files[index])
+        image_A         = np.asarray(Image.open(image_A_path), dtype=np.float32)
+        image_B         = np.asarray(Image.open(image_B_path), dtype=np.float32)
+        image_id        = self.files[index].split("/")[-1].split(".")[0]
         if self.use_weak_lables:
-            label_path = os.path.join(self.weak_labels_output, image_id+".png")
+            label_path  = os.path.join(self.weak_labels_output, image_id+".png")
         else:
-            label_path = os.path.join(self.root, 'label', self.files[index])
+            label_path  = os.path.join(self.root, 'label', self.files[index])
         label = np.asarray(Image.open(label_path), dtype=np.int32)
         return image_A, image_B, label, image_id
 
