@@ -20,7 +20,7 @@ class ImageDataset(BaseDataSet):
     def _set_files(self):
         if self.split == "val":
             file_list = os.path.join(self.root, 'list', f"{self.split}" + ".txt")
-        if self.split == "test":
+        elif self.split == "test":
             file_list = os.path.join(self.root, 'list', f"{self.split}" + ".txt")
         elif self.split in ["train_supervised", "train_unsupervised"]:
             file_list = os.path.join(self.root, 'list', f"{self.n_labeled_examples}_{self.split}" + ".txt")
