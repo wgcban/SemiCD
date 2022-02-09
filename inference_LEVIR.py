@@ -27,36 +27,13 @@ from utils.helpers import DeNormalize
 import time
 
 
-class testDataset(Dataset):
-    def __init__(self, Dataset_Path):
-        mean    = [0.485, 0.456, 0.406]
-        std     = [0.229, 0.224, 0.225]
-        self.Dataset_Path = Dataset_Path
-
-        file_list       = os.path.join(self.Dataset_Path, 'list', "train.txt")
-        self.filelist   = np.loadtxt(file_list, dtype=str)
-        if self.filelist.ndim == 2:
-            return self.filelist[:, 0]
-
-        self.to_tensor = transforms.ToTensor()
-        self.normalize = transforms.Normalize(mean, std)
-
-    def __len__(self):
-        return len(self.filelist)
-
-    def __getitem__(self, index):
-        image_A_path    = os.path.join(self.Dataset_Path, 'A', self.filelist[index])
-        image_B_path    = os.path.join(self.Dataset_Path, 'B', self.filelist[index])
-        label_path      = os.path.join(self.Dataset_Path, 'label', self.filelist[index])
-
-        image_A         = np.asarray(Image.open(image_A_path), dtype=np.float32)
-        image_B         = np.asarray(Image.open(image_B_path), dtype=np.float32)
-        label           = np.asarray(Image.open(label_path), dtype=np.int32)
-        image_id        = self.filelist[index].split("/")[-1].split(".")[0]
-
-        image_A = self.normalize(self.to_tensor(image_A))
-        image_B = self.normalize(self.to_tensor(image_B))
-        return image_A, image_B, label, image_id
+def get_imgid_list(Dataset_Path, split, i):
+    file_list  = os.path.join(Dataset_Path, 'list', split +".txt")
+    filelist   = np.loadtxt(file_list, dtype=str)
+    if filelist.ndim == 2:
+        return filelist[:, 0]
+    image_id = filelist[i].split("/")[-1].split(".")[0]
+    return image_id
 
 def multi_scale_predict(model, image_A, image_B, scales, num_classes, flip=False):
     H, W        = (image_A.size(2), image_A.size(3))
@@ -79,7 +56,7 @@ def multi_scale_predict(model, image_A, image_B, scales, num_classes, flip=False
             fliped_predictions  = upsample(model(A_l=fliped_img_A, B_l=fliped_img_B))
             scaled_prediction   = 0.5 * (fliped_predictions.flip(-1) + scaled_prediction)
         total_predictions += scaled_prediction.data.cpu().numpy().squeeze(0)
-
+    
     total_predictions /= len(scales)
     return total_predictions[:, :H, :W]
 
@@ -91,9 +68,12 @@ def main():
     config = json.load(open(args.config))
     scales = [1.0]
 
-    # DATA
-    testdataset = testDataset(args.Dataset_Path)
-    loader      = DataLoader(testdataset, batch_size=1, shuffle=False, num_workers=1)
+    # DATA LOADER
+    config['val_loader']["batch_size"]  = 1
+    config['val_loader']["num_workers"] = 1
+    config['val_loader']["split"]       = "test"
+    config['val_loader']["shuffle"]     = False
+    loader = dataloaders.CDDataset(config['val_loader'])
     num_classes = 2
     palette     = get_voc_pallete(num_classes)
 
@@ -127,7 +107,8 @@ def main():
     total_correct, total_label = 0, 0
 
     for index, data in enumerate(tbar):
-        image_A, image_B, label, image_id = data
+        image_A, image_B, label = data
+        image_id = get_imgid_list(Dataset_Path=args.Dataset_Path, split=config['val_loader']["split"], i=index)
         image_A = image_A.cuda()
         image_B = image_B.cuda()
         label   = label.cuda()
@@ -135,6 +116,7 @@ def main():
         #PREDICT
         with torch.no_grad():
             output = multi_scale_predict(model, image_A, image_B, scales, num_classes)
+        
         prediction = np.asarray(np.argmax(output, axis=0), dtype=np.uint8)
 
         #Calculate metrics
@@ -151,7 +133,7 @@ def main():
 
         #SAVE RESULTS
         prediction_im = colorize_mask(prediction, palette)
-        prediction_im.save('/media/lidan/ssd2/SemiCD/outputs/'+config["experim_name"]+'/'+image_id[0]+'.png')
+        prediction_im.save('/media/lidan/ssd2/SemiCD/outputs/'+config["experim_name"]+'/'+image_id+'.png')
     
     #Printing average metrics on test-data
     pixAcc = 1.0 * total_correct / (np.spacing(1) + total_label)
