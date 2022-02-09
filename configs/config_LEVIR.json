@@ -1,6 +1,6 @@
 {
-    "name": "SemiCD - supervised+unsupervised only",
-    "experim_name": "SemiCD_(sup+unsup)_10",
+    "name": "SemiCD - supervised only",
+    "experim_name": "SemiCD_(sup)_10",
     "sup_percent":10,
     "n_total_lbl": 7120,
     "n_gpu": 1,
@@ -13,8 +13,8 @@
     "pretrained": true,
 
     "model":{
-        "supervised": false,
-        "semi": true,
+        "supervised": true,
+        "semi": false,
         "supervised_w": 1,
 
         "sup_loss": "CE",
@@ -107,6 +107,6 @@
         "log_per_iter": 20,
 
         "val": true,
-        "val_per_epochs": 5
+        "val_per_epochs": 4
     }
 }

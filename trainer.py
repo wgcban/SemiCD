@@ -164,6 +164,8 @@ class Trainer(BaseTrainer):
             # METRICS TO TENSORBOARD
             self.wrt_step = (epoch) * len(self.val_loader)
             self.writer.add_scalar(f'{self.wrt_mode}/loss', total_loss_val.average, self.wrt_step)
+            self.writer.add_scalar(f'{self.wrt_mode}/Change-IoU', IoU[1], self.wrt_step)
+            self.writer.add_scalar(f'{self.wrt_mode}/No-Change-IoU', IoU[0], self.wrt_step)
             for k, v in list(seg_metrics.items())[:-1]: 
                 self.writer.add_scalar(f'{self.wrt_mode}/{k}', v, self.wrt_step)
 

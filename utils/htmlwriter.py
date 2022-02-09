@@ -67,6 +67,7 @@ class HTML:
                 with td(style="word-wrap: break-word;", halign="center", valign="top"):
                     td(f'Epoch : {epoch}')
                     if domain is not None:
+
                         td(f'Mean_IoU_{domain} : {seg_resuts[f"Mean_IoU_{domain}"]}')
                         td(f'PixelAcc_{domain} : {seg_resuts[f"Pixel_Accuracy_{domain}"]}')
                         td(f'Val Loss_{domain} : {seg_resuts[f"val_loss_{domain}"]}')
