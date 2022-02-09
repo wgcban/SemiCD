@@ -23,7 +23,7 @@ class ImageDataset(BaseDataSet):
         elif self.split == "test":
             file_list = os.path.join(self.root, 'list', f"{self.split}" + ".txt")
         elif self.split in ["train_supervised", "train_unsupervised"]:
-            file_list = os.path.join(self.root, 'list', f"{self.n_labeled_examples}_{self.split}" + ".txt")
+            file_list = os.path.join(self.root, 'list', f"{self.percnt_lbl}_{self.split}" + ".txt")
         else:
             raise ValueError(f"Invalid split name {self.split}")
 

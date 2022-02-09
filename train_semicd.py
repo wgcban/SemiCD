@@ -20,8 +20,8 @@ def main(config, resume):
     train_logger = Logger()
     
     # DATA LOADERS
-    config['train_supervised']['n_labeled_examples'] = config['n_labeled_examples']
-    config['train_unsupervised']['n_labeled_examples'] = config['n_labeled_examples']
+    config['train_supervised']['percnt_lbl'] = config["sup_percent"]
+    config['train_unsupervised']['percnt_lbl'] = config["sup_percent"]
     config['train_unsupervised']['use_weak_lables'] = config['use_weak_lables']
     supervised_loader = dataloaders.CDDataset(config['train_supervised'])
     unsupervised_loader = dataloaders.CDDataset(config['train_unsupervised'])

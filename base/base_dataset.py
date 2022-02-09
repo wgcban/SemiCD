@@ -12,7 +12,7 @@ from math import ceil
 class BaseDataSet(Dataset):
     def __init__(self, data_dir, split, mean, std, base_size=None, augment=True, val=False,
                 jitter=False, use_weak_lables=False, weak_labels_output=None, crop_size=None, scale=False, flip=False, rotate=False,
-                blur=False, return_id=False, n_labeled_examples=None):
+                blur=False, return_id=False, percnt_lbl=None):
 
         self.root = data_dir
         self.split = split
@@ -23,7 +23,7 @@ class BaseDataSet(Dataset):
         self.jitter = jitter
         self.image_padding = (np.array(mean)*255.).tolist()
         self.return_id = return_id
-        self.n_labeled_examples = n_labeled_examples
+        self.percnt_lbl = percnt_lbl
         self.val = val
 
         self.use_weak_lables = use_weak_lables
