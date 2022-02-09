@@ -1,5 +1,5 @@
 {
-    "name": "SemiCD - (supervised + unlabeled samples)",
+    "name": "SemiCD - supervised+unsupervised only",
     "experim_name": "SemiCD_v2",
     "n_gpu": 1,
     "n_labeled_examples": 1400,
