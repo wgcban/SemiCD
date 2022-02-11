@@ -1,5 +1,5 @@
 {
-    "name": "SemiCD - supervised only",
+    "name": "SemiCD-LEVIR-CD",
     "experim_name": "SemiCD_(sup)_10",
     "sup_percent":10,
     "n_total_lbl": 7120,
@@ -96,14 +96,14 @@
 
     "trainer": {
         "epochs": 80,
-        "save_dir": "/media/lidan/ssd2/SemiCD/saved/",
+        "save_dir": "/media/lidan/ssd2/SemiCD/saved/LEVIR-CD",
         "save_period": 5,
   
         "monitor": "max Mean_IoU",
         "early_stop": 10,
         
         "tensorboardX": true,
-        "log_dir": "/media/lidan/ssd2/SemiCD/saved/",
+        "log_dir": "/media/lidan/ssd2/SemiCD/saved/LEVIR-CD",
         "log_per_iter": 20,
 
         "val": true,
