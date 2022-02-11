@@ -1,22 +1,23 @@
 {
-    "name": "CCT",
-    "experim_name": "CCT_V1",
+    "name": "SemiCD",
+    "experim_name": "SemiCD_DSIFN_(sup)_10",
+    "sup_percent": 10,
+    "n_total_lbl": 14400,
     "n_gpu": 1,
-    "n_labeled_examples": 398,
     "diff_lrs": true,
     "ramp_up": 0.1,
     "unsupervised_w": 30,
     "lr_scheduler": "Poly",
-    "use_weak_lables":true,
+    "use_weak_lables":false,
     "weakly_loss_w": 0.4,
     "pretrained": true,
 
     "model":{
-        "supervised": false,
-        "semi": true,
+        "supervised": true,
+        "semi": false,
         "supervised_w": 1,
 
-        "sup_loss": "FL",
+        "sup_loss": "CE",
         "un_loss": "MSE",
 
         "softmax_temp": 1,
@@ -55,33 +56,33 @@
 
     "train_supervised": {
         "data_dir": "/media/lidan/ssd2/CDData/DSIFN_256",
-        "batch_size": 4,
-        "crop_size": 713,
+        "batch_size": 8,
+        "crop_size": 256,
         "shuffle": true,
-        "base_size": 713,
+        "base_size": 256,
         "scale": true,
         "augment": true,
         "flip": true,
         "rotate": true,
         "blur": true,
         "split": "train_supervised",
-        "num_workers": 1
+        "num_workers": 2
     },
 
     "train_unsupervised": {
         "data_dir": "/media/lidan/ssd2/CDData/DSIFN_256",
         "weak_labels_output": "pseudo_labels",
-        "batch_size": 4,
-        "crop_size": 713,
+        "batch_size": 8,
+        "crop_size": 256,
         "shuffle": true,
-        "base_size": 713,
+        "base_size": 256,
         "scale": true,
         "augment": true,
         "flip": true,
         "rotate": true,
         "blur": true,
         "split": "train_unsupervised",
-        "num_workers": 1
+        "num_workers": 2
     },
 
     "val_loader": {
@@ -95,14 +96,14 @@
 
     "trainer": {
         "epochs": 80,
-        "save_dir": "saved/",
+        "save_dir": "/media/lidan/ssd2/SemiCD/saved/DSIFN-CD",
         "save_period": 5,
   
         "monitor": "max Mean_IoU",
         "early_stop": 10,
         
         "tensorboardX": true,
-        "log_dir": "saved/",
+        "log_dir": "/media/lidan/ssd2/SemiCD/saved/DSIFN-CD",
         "log_per_iter": 20,
 
         "val": true,
