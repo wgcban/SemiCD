@@ -129,7 +129,7 @@ def main():
         total_correct, total_label      = total_correct+correct, total_label+labeled
         pixAcc = 1.0 * total_correct / (np.spacing(1) + total_label)
         IoU = 1.0 * total_inter / (np.spacing(1) + total_union)
-        tbar.set_description('Test Results | PixelAcc: {:.2f}, IoU(no-change): {:.2f}, IoU(change): {:.2f} |'.format(pixAcc, IoU[0], IoU[1]))
+        tbar.set_description('Test Results | PixelAcc: {:.4f}, IoU(no-change): {:.4f}, IoU(change): {:.4f} |'.format(pixAcc, IoU[0], IoU[1]))
 
         #SAVE RESULTS
         prediction_im = colorize_mask(prediction, palette)
@@ -150,9 +150,9 @@ def main():
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='PyTorch Training')
-    parser.add_argument('--config', default='/media/lidan/ssd2/SemiCD/saved/SemiCD_v1/config.json',type=str,
+    parser.add_argument('--config', default='/media/lidan/ssd2/SemiCD/saved/LEVIR-CD/SemiCD_(sup+unsup)_40/config.json',type=str,
                         help='Path to the config file')
-    parser.add_argument( '--model', default='/media/lidan/ssd2/SemiCD/saved/SemiCD_v1/best_model.pth', type=str,
+    parser.add_argument( '--model', default='/media/lidan/ssd2/SemiCD/saved/LEVIR-CD/SemiCD_(sup+unsup)_40/best_model.pth', type=str,
                         help='Path to the trained .pth model')
     parser.add_argument( '--save', action='store_true', help='Save images')
     parser.add_argument('--Dataset_Path', default="/media/lidan/ssd2/CDData/LEVIR-CD256", type=str,
