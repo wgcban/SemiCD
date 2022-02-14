@@ -73,6 +73,7 @@ def main():
     config['val_loader']["num_workers"] = 1
     config['val_loader']["split"]       = "test"
     config['val_loader']["shuffle"]     = False
+    config['val_loader']['data_dir']    = args.Dataset_Path
     loader = dataloaders.CDDataset(config['val_loader'])
     num_classes = 2
     palette     = get_voc_pallete(num_classes)
