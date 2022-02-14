@@ -1,7 +1,8 @@
 {
     "name": "SemiCD-LEVIR(sup)-WHU(unsup)",
-    "experim_name": "SemiCD_(LEVIR-sup)_(WHU-unsup)",
-    "sup_percent": 100,
+    "experim_name": "SemiCD_(LEVIR-sup-10)_(WHU-unsup)",
+    "sup_percent": 10,
+    "unsup_percent": 100,
     "n_total_lbl": 7120,
     "n_gpu": 1,
     "diff_lrs": true,

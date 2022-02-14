@@ -21,7 +21,7 @@ def main(config, resume):
     
     # DATA LOADERS
     config['train_supervised']['percnt_lbl'] = config["sup_percent"]
-    config['train_unsupervised']['percnt_lbl'] = config["sup_percent"]
+    config['train_unsupervised']['percnt_lbl'] = config["unsup_percent"]
     config['train_unsupervised']['use_weak_lables'] = config['use_weak_lables']
     supervised_loader = dataloaders.CDDataset(config['train_supervised'])
     unsupervised_loader = dataloaders.CDDataset(config['train_unsupervised'])
