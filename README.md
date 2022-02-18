@@ -8,23 +8,6 @@ This repocitory contains the official implementation of our paper:Semi-Supervise
 
 <p align="center"><img src="./imgs/method.jpg" width="900"></p>
 
-### Highlights
-
-**(1) Consistency Training for semantic segmentation.** \
-We observe that for semantic segmentation, due to the dense nature of the task,
-the cluster assumption is more easily enforced over the hidden representations rather than the inputs.
-
-**(2) Cross-Consistecy Training.** \
-We propose CCT (Cross-Consistecy Training) for semi-supervised semantic segmentation, where we define
-a number of novel perturbations, and show the effectiveness of enforcing consistency over the encoder's outputs
-rather than the inputs.
-
-**(3) Using weak-labels and pixel-level labels from multiple domains.** \
-The proposed method is quite simple and flexible, and can easily be extended to use image-level labels and
-pixel-level labels from multiple-domains.
-
-
-
 ### Requirements
 
 This repo was tested with Ubuntu 18.04.3 LTS, Python 3.7, PyTorch 1.1.0, and CUDA 10.0. But it should be runnable with recent PyTorch versions >=1.1.0.
