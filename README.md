@@ -72,10 +72,6 @@ For inference, we need a pretrained model, the jpg images we'd like to segment a
 python inference.py --config config.json --model best_model.pth --images images_folder
 ```
 
-The predictions will be saved as `.png` images in `outputs\` is used, for Pacal VOC the default palette is:
-
-<p align="center"><img src="https://raw.githubusercontent.com/yassouali/pytorch_segmentation/master/images/colour_scheme.png" width="550"></p>
-
 Here are the flags available for inference:
 
 ```
@@ -93,13 +89,7 @@ Pre-trained models can be downloaded [here](https://github.com/yassouali/CCT/rel
 If you find this repo useful for your research, please consider citing the paper as follows:
 
 ```
-@InProceedings{Ouali_2020_CVPR,
-  author = {Ouali, Yassine and Hudelot, Celine and Tami, Myriam},
-  title = {Semi-Supervised Semantic Segmentation With Cross-Consistency Training},
-  booktitle = {The IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
-  month = {June},
-  year = {2020}
-}
+
 ```
 
 For any questions, please contact Yassine Ouali.
@@ -161,6 +151,6 @@ are self-explanatory.
 
 #### Acknowledgements
 
-- Pseudo-labels generation is based on Jiwoon Ahn's implementation [irn](https://github.com/jiwoon-ahn/irn).
+- This code is based on [CCT](https://github.com/yassouali/CCT).
 - Code structure was based on [Pytorch-Template](https://github.com/victoresque/pytorch-template/blob/master/README.m)
 - ResNet backbone was downloaded from [torchcv](https://github.com/donnyyou/torchcv)
