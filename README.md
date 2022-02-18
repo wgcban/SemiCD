@@ -2,13 +2,11 @@
 
 ## SS-CD: Semi-Supervised Change Detection in Remote Sensing Images via Consistency Regularization
 
-#### [Paper](https://arxiv.org/abs/2003.09005), [Project Page](https://yassouali.github.io/cct_page/)
+#### [Paper]()
 
-This repo contains the official implementation of CVPR 2020 paper: Semi-Supervised Semantic Segmentation with Cross-Consistecy Training, which
-adapts the traditional consistency training framework of semi-supervised learning for semantic segmentation, with an extension to weak-supervised
-learning and learning on multiple domains.
+This repocitory contains the official implementation of our paper:Semi-Supervised Change Detection in Remote Sensing Images via Consistency Regularization.
 
-<p align="center"><img src="https://yassouali.github.io/cct_page/files/overview.png" width="450"></p>
+<p align="center"><img src="./imgs/method.jpg" width="450"></p>
 
 ### Highlights
 
