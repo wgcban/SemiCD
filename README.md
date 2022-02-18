@@ -1,6 +1,6 @@
 
 
-## Semi-Supervised Semantic Segmentation with Cross-Consistency Training (CCT)
+## SS-CD: Semi-Supervised Change Detection in Remote Sensing Images via Consistency Regularization
 
 #### [Paper](https://arxiv.org/abs/2003.09005), [Project Page](https://yassouali.github.io/cct_page/)
 
