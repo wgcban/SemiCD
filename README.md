@@ -6,7 +6,7 @@
 
 This repocitory contains the official implementation of our paper:Semi-Supervised Change Detection in Remote Sensing Images via Consistency Regularization.
 
-<p align="center"><img src="./imgs/method.jpg" width="450"></p>
+<p align="center"><img src="./imgs/method.jpg" width="900"></p>
 
 ### Highlights
 
