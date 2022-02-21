@@ -1,21 +1,21 @@
 {
-    "name": "SemiCD-LEVIR-CD",
-    "experim_name": "SemiCD_(sup)_100",
-    "sup_percent":100,
-    "unsup_percent":100,
+    "name": "TGRS21-LEVIR-CD",
+    "experim_name": "TGRS21_(semi)_60",
+    "sup_percent":60,
+    "unsup_percent":60,
     "n_total_lbl": 7120,
     "n_gpu": 1,
     "diff_lrs": true,
     "ramp_up": 0.1,
-    "unsupervised_w": 30,
+    "unsupervised_w": 0.01,
     "lr_scheduler": "Poly",
     "use_weak_lables":false,
     "weakly_loss_w": 0.4,
     "pretrained": true,
 
     "model":{
-        "supervised": true,
-        "semi": false,
+        "supervised": false,
+        "semi": true,
         "supervised_w": 1,
 
         "sup_loss": "CE",
