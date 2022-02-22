@@ -1,5 +1,5 @@
 {
-    "name": "TGRS21-LEVIR-CD",
+    "name": "SemiCDNet-TGRS21-LEVIR-CD",
     "experim_name": "TGRS21_(semi)_60",
     "sup_percent":60,
     "unsup_percent":60,
