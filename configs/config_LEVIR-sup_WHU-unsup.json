@@ -7,7 +7,7 @@
     "n_gpu": 1,
     "diff_lrs": true,
     "ramp_up": 0.1,
-    "unsupervised_w": 30,
+    "unsupervised_w": 5.0,
     "lr_scheduler": "Poly",
     "use_weak_lables":false,
     "weakly_loss_w": 0.4,
