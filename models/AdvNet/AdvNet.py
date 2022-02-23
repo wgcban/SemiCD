@@ -68,7 +68,7 @@ class AdvNet(BaseModel):
 
         # The auxilary decoders
         if self.mode == 'semi' or self.mode == 'weakly_semi':
-            bce_loss = BCEWithLogitsLoss2d()
+            self.bce_loss = BCEWithLogitsLoss2d()
             self.model_D = FCDiscriminator(num_classes=2, ndf = 64)
 
 
@@ -112,22 +112,15 @@ class AdvNet(BaseModel):
             D_out       = self.model_D(F.softmax(output_ul))
             D_out_sigmoid = F.sigmoid(D_out).data.cpu().numpy().squeeze(axis=1)
             ignore_mask_remain = np.zeros(D_out_sigmoid.shape).astype(np.bool)
-            loss_adv = bce_loss(D_out, make_D_label(1, ignore_mask_remain)).data.cpu().numpy()[0]
+            loss_adv = self.bce_loss(D_out, make_D_label(1, ignore_mask_remain)).data.cpu().numpy()
 
             #Computing unsupervised loss
-            semi_ignore_mask = (D_out_sigmoid < 0.3)
             semi_gt = output_ul.data.cpu().numpy().argmax(axis=1)
-            semi_gt[semi_ignore_mask] = 255
 
-            semi_ratio = 1.0 - float(semi_ignore_mask.sum())/semi_ignore_mask.size
-            if semi_ratio == 0.0:
-                loss_semi_value += 0
-            else:
-                semi_gt = torch.FloatTensor(semi_gt)
-                
-                loss_semi = loss_calc(output_ul, semi_gt)
-                loss_semi = loss_semi
-                loss_semi_value += loss_semi.data.cpu().numpy()[0]
+            semi_gt = torch.FloatTensor(semi_gt)   
+            loss_semi = loss_calc(output_ul, semi_gt)
+            loss_semi = loss_semi
+            loss_semi_value = loss_semi.data.cpu().numpy()
 
             loss_unsup = loss_adv+ loss_semi_value
             curr_losses = {'loss_sup': loss_sup}
