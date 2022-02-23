@@ -9,7 +9,8 @@ from utils.losses import *
 from models.decoders import *
 from models.encoder import Encoder
 from utils.losses import CE_loss
-from models.s4GAN.discriminators import s4GAN_discriminator, find_good_maps, loss_calc
+from torch.autograd import Variable
+from models.s4GAN.discriminators import s4GAN_discriminator, find_good_maps, loss_calc, one_hot
 
 class s4GAN(BaseModel):
     def __init__(self, num_classes, conf, sup_loss=None, cons_w_unsup=None, testing=False,
@@ -94,17 +95,31 @@ class s4GAN(BaseModel):
 
             ### Compute unsupervised loss s4GAN ###
             ### From s4GAN
+            #For unlabeled data
             A_ul_d = (A_ul-torch.min(A_ul))/(torch.max(A_ul)- torch.min(A_ul))
             B_ul_d = (B_ul-torch.min(B_ul))/(torch.max(B_ul)- torch.min(B_ul))
-
-            #print (pred_remain.size(), images_remain.size())
             pred_cat = torch.cat((F.softmax(output_ul, dim=1), A_ul_d, B_ul_d), dim=1)
             D_out_z, D_out_y_pred = self.model_D(pred_cat)
             pred_sel, labels_sel, count = find_good_maps(D_out_z, output_ul)
-            loss_st = loss_calc(pred_sel, labels_sel) 
-
-
+            if count > 0:
+                loss_st = loss_calc(pred_sel, labels_sel)
+            else:
+                loss_st = 0.0
+            #For labeled data
+            A_l_d = (A_l-torch.min(A_l))/(torch.max(A_l)- torch.min(A_l))
+            B_l_d = (B_l-torch.min(B_l))/(torch.max(B_l)- torch.min(B_l))
+            D_gt_v = Variable(one_hot(target_l)).cuda()
+            D_gt_v_cat = torch.cat((D_gt_v, target_l), dim=1)
+            D_out_z_gt , D_out_y_gt = self.model_D(D_gt_v_cat)
+            # L1 loss for Feature Matching Loss
+            loss_fm = torch.mean(torch.abs(torch.mean(D_out_y_gt, 0) - torch.mean(D_out_y_pred, 0)))
+            if count > 0: # if any good predictions found for self-training loss
+                loss_sup = loss_sup +  0.1*loss_fm + 1.0*loss_st 
+            else:
+                loss_sup = loss_sup + 0.1*loss_fm
             curr_losses = {'loss_sup': loss_sup}
+
+            
 
             if output_ul.shape != A_ul.shape:
                 output_ul = F.interpolate(output_ul, size=input_size, mode='bilinear', align_corners=True)

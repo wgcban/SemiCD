@@ -80,3 +80,11 @@ def loss_calc(pred, label):
     label = Variable(label.long()).cuda()
     criterion = CrossEntropy2d().cuda()  # Ignore label ??
     return criterion(pred, label)
+
+def one_hot(label):
+    label = label.numpy()
+    one_hot = np.zeros((label.shape[0], 2, label.shape[1], label.shape[2]), dtype=label.dtype)
+    for i in range(2):
+        one_hot[:,i,...] = (label==i)
+    #handle ignore labels
+    return torch.FloatTensor(one_hot)
