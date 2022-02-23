@@ -109,10 +109,10 @@ class s4GAN(BaseModel):
             else:
                 loss_st = 0.0
             #For labeled data
-            A_l_d = (A_l-torch.min(A_l))/(torch.max(A_l)- torch.min(A_l))
-            B_l_d = (B_l-torch.min(B_l))/(torch.max(B_l)- torch.min(B_l))
             D_gt_v = Variable(one_hot(target_l)).cuda()
-            D_gt_v_cat = torch.cat((D_gt_v, target_l), dim=1)
+            A_l = (A_l - torch.min(A_l))/(torch.max(A_l)-torch.min(A_l))
+            B_l = (B_l - torch.min(B_l))/(torch.max(B_l)-torch.min(B_l))
+            D_gt_v_cat = torch.cat((D_gt_v, A_l, B_l), dim=1)
             D_out_z_gt , D_out_y_gt = self.model_D(D_gt_v_cat)
             # L1 loss for Feature Matching Loss
             loss_fm = torch.mean(torch.abs(torch.mean(D_out_y_gt, 0) - torch.mean(D_out_y_pred, 0)))
@@ -156,7 +156,7 @@ class s4GAN(BaseModel):
     def get_other_params(self):
         if self.mode == 'semi':
             return chain(self.encoder.get_module_params(), self.main_decoder.parameters(), 
-                        self.Ds.parameters(), self.De.parameters())
+                        self.model_D.parameters())
 
         return chain(self.encoder.get_module_params(), self.main_decoder.parameters())
 
