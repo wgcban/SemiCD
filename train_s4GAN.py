@@ -44,7 +44,7 @@ def main(config, resume):
     cons_w_unsup = consistency_weight(final_w=config['unsupervised_w'], iters_per_epoch=len(unsupervised_loader),
                                         rampup_ends=rampup_ends)
 
-    model = models.SemiCDNet_TGRS21(num_classes=val_loader.dataset.num_classes, conf=config['model'],
+    model = models.s4GAN(num_classes=val_loader.dataset.num_classes, conf=config['model'],
     						sup_loss=sup_loss, cons_w_unsup=cons_w_unsup,
     						weakly_loss_w=config['weakly_loss_w'], use_weak_lables=config['use_weak_lables'])
     print(f'\n{model}\n')
@@ -65,7 +65,7 @@ def main(config, resume):
 if __name__=='__main__':
     # PARSE THE ARGS
     parser = argparse.ArgumentParser(description='PyTorch Training')
-    parser.add_argument('-c', '--config', default='configs/config_LEVIR-sup_WHU-unsup.json',type=str,
+    parser.add_argument('-c', '--config', default='configs/config_LEVIR.json',type=str,
                         help='Path to the config file')
     parser.add_argument('-r', '--resume', default=None, type=str,
                         help='Path to the .pth model checkpoint to resume training')

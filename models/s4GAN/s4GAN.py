@@ -57,6 +57,7 @@ class s4GAN(BaseModel):
 
         # The auxilary decoders
         if self.mode == 'semi' or self.mode == 'weakly_semi':
+            self.criterionD = nn.BCELoss()
             self.model_D = s4GAN_discriminator(num_classes=2)
 
 
@@ -96,6 +97,8 @@ class s4GAN(BaseModel):
             ### Compute unsupervised loss s4GAN ###
             ### From s4GAN
             #For unlabeled data
+            for param in self.model_D.parameters():
+                param.requires_grad = False
             A_ul_d = (A_ul-torch.min(A_ul))/(torch.max(A_ul)- torch.min(A_ul))
             B_ul_d = (B_ul-torch.min(B_ul))/(torch.max(B_ul)- torch.min(B_ul))
             pred_cat = torch.cat((F.softmax(output_ul, dim=1), A_ul_d, B_ul_d), dim=1)
@@ -119,7 +122,21 @@ class s4GAN(BaseModel):
                 loss_sup = loss_sup + 0.1*loss_fm
             curr_losses = {'loss_sup': loss_sup}
 
-            
+            #Training Descriminator
+            # train D
+            for param in self.model_D.parameters():
+                param.requires_grad = True
+            # train with pred
+            pred_cat = pred_cat.detach()
+            D_out_z, _ = self.model_D(pred_cat)
+            y_fake_ = Variable(torch.zeros(D_out_z.size(0), 1).cuda())
+            loss_D_fake = self.criterionD(D_out_z, y_fake_)
+            # train with gt
+            D_out_z_gt , _ = self.model_D(D_gt_v_cat)
+            y_real_ = Variable(torch.ones(D_out_z_gt.size(0), 1).cuda()) 
+            loss_D_real = self.criterionD(D_out_z_gt, y_real_)
+        
+            loss_unsup = (loss_D_fake + loss_D_real)/2.0
 
             if output_ul.shape != A_ul.shape:
                 output_ul = F.interpolate(output_ul, size=input_size, mode='bilinear', align_corners=True)
