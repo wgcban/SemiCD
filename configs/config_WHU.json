@@ -1,8 +1,8 @@
 {
-    "name": "SemiCDNet-TGRS21-WHU-CD",
-    "experim_name": "TGRS21_(semi)_60",
-    "sup_percent":60,
-    "unsup_percent":60,
+    "name": "s4GAN-WHU-CD",
+    "experim_name": "s4GAN_(semi)_10",
+    "sup_percent":10,
+    "unsup_percent":10,
     "n_gpu": 1,
     "diff_lrs": true,
     "ramp_up": 0.1,
@@ -96,14 +96,14 @@
 
     "trainer": {
         "epochs": 80,
-        "save_dir": "/media/lidan/ssd2/SemiCD/saved/WHU-CD",
+        "save_dir": "/media/lidan/ssd2/SemiCD/saved/WHU-CD/s4GAN",
         "save_period": 5,
   
         "monitor": "max Mean_IoU",
         "early_stop": 10,
         
         "tensorboardX": true,
-        "log_dir": "/media/lidan/ssd2/SemiCD/saved/WHU-CD",
+        "log_dir": "/media/lidan/ssd2/SemiCD/saved/WHU-CD/s4GAN",
         "log_per_iter": 20,
 
         "val": true,

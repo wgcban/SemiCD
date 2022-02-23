@@ -1,2 +1,1 @@
-from .Consistency_ResNet50_CD import Consistency_ResNet50_CD
-from .SemiCDNet_TGRS21.SemiCDNet import SemiCDNet_TGRS21
+from .s4GAN.s4GAN import s4GAN

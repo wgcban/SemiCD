@@ -9,9 +9,9 @@ from utils.losses import *
 from models.decoders import *
 from models.encoder import Encoder
 from utils.losses import CE_loss
-from models.SemiCDNet_TGRS21.discriminators import FCDiscriminator
+from models.s4GAN.discriminators import s4GAN_discriminator, find_good_maps, loss_calc
 
-class SemiCDNet_TGRS21(BaseModel):
+class s4GAN(BaseModel):
     def __init__(self, num_classes, conf, sup_loss=None, cons_w_unsup=None, testing=False,
             pretrained=True, use_weak_lables=False, weakly_loss_w=0.4):
 
@@ -19,7 +19,7 @@ class SemiCDNet_TGRS21(BaseModel):
         if not testing:
             assert (sup_loss is not None) and (cons_w_unsup is not None)
 
-        super(SemiCDNet_TGRS21, self).__init__()
+        super(s4GAN, self).__init__()
         assert int(conf['supervised']) + int(conf['semi']) == 1, 'one mode only'
         if conf['supervised']:
             self.mode = 'supervised'
@@ -56,8 +56,7 @@ class SemiCDNet_TGRS21(BaseModel):
 
         # The auxilary decoders
         if self.mode == 'semi' or self.mode == 'weakly_semi':
-            self.Ds = FCDiscriminator(num_classes=1)
-            self.De = FCDiscriminator(num_classes=2)
+            self.model_D = s4GAN_discriminator(num_classes=2)
 
 
     def forward(self, A_l=None, B_l=None, target_l=None, A_ul=None, B_ul=None, target_ul=None, curr_iter=None, epoch=None):
@@ -93,12 +92,18 @@ class SemiCDNet_TGRS21(BaseModel):
             x_ul      = self.encoder(A_ul, B_ul)
             output_ul = self.main_decoder(x_ul)
 
-            # Compute unsupervised loss
-            loss_Ds = self.unsuper_loss(self.Ds(torch.unsqueeze(target_l,1)), torch.ones(output_l.size(0),1,1).type(torch.LongTensor).cuda()) + self.unsuper_loss(self.Ds(torch.argmax(output_ul.detach(), dim=1, keepdim=True)), torch.zeros(output_ul.size(0),1,1).type(torch.LongTensor).cuda())
-            E_l     =  F.softmax(output_l.detach(), dim=1)*torch.log(F.softmax(output_l.detach(), dim=1)+1e-6)
-            E_ul    =  F.softmax(output_ul.detach(), dim=1)*torch.log(F.softmax(output_ul.detach(), dim=1)+1e-6)
-            loss_De   = self.unsuper_loss(self.De(E_l), torch.ones(output_l.size(0),1,1).type(torch.LongTensor).cuda()) + self.unsuper_loss(self.De(E_ul), torch.zeros(output_ul.size(0),1,1).type(torch.LongTensor).cuda())
-            loss_unsup = loss_Ds  + loss_De
+            ### Compute unsupervised loss s4GAN ###
+            ### From s4GAN
+            A_ul_d = (A_ul-torch.min(A_ul))/(torch.max(A_ul)- torch.min(A_ul))
+            B_ul_d = (B_ul-torch.min(B_ul))/(torch.max(B_ul)- torch.min(B_ul))
+
+            #print (pred_remain.size(), images_remain.size())
+            pred_cat = torch.cat((F.softmax(output_ul, dim=1), A_ul_d, B_ul_d), dim=1)
+            D_out_z, D_out_y_pred = self.model_D(pred_cat)
+            pred_sel, labels_sel, count = find_good_maps(D_out_z, output_ul)
+            loss_st = loss_calc(pred_sel, labels_sel) 
+
+
             curr_losses = {'loss_sup': loss_sup}
 
             if output_ul.shape != A_ul.shape:
