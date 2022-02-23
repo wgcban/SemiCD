@@ -9,9 +9,21 @@ from utils.losses import *
 from models.decoders import *
 from models.encoder import Encoder
 from utils.losses import CE_loss
-from models.SemiCDNet_TGRS21.discriminators import FCDiscriminator
+from models.AdvNet.discriminators import FCDiscriminator,make_D_label
+from utils.losses import BCEWithLogitsLoss2d
 
-class SemiCDNet_TGRS21(BaseModel):
+def loss_calc(pred, label):
+    """
+    This function returns cross entropy loss for semantic segmentation
+    """
+    # out shape batch_size x channels x h x w -> batch_size x channels x h x w
+    # label shape h x w x 1 x batch_size  -> batch_size x 1 x h x w
+    label = Variable(label.long()).cuda()
+    criterion = CrossEntropy2d().cuda()
+
+    return criterion(pred, label)
+
+class AdvNet(BaseModel):
     def __init__(self, num_classes, conf, sup_loss=None, cons_w_unsup=None, testing=False,
             pretrained=True, use_weak_lables=False, weakly_loss_w=0.4):
 
@@ -19,7 +31,7 @@ class SemiCDNet_TGRS21(BaseModel):
         if not testing:
             assert (sup_loss is not None) and (cons_w_unsup is not None)
 
-        super(SemiCDNet_TGRS21, self).__init__()
+        super(AdvNet, self).__init__()
         assert int(conf['supervised']) + int(conf['semi']) == 1, 'one mode only'
         if conf['supervised']:
             self.mode = 'supervised'
@@ -56,8 +68,8 @@ class SemiCDNet_TGRS21(BaseModel):
 
         # The auxilary decoders
         if self.mode == 'semi' or self.mode == 'weakly_semi':
-            self.Ds = FCDiscriminator(num_classes=1)
-            self.De = FCDiscriminator(num_classes=2)
+            bce_loss = BCEWithLogitsLoss2d()
+            self.model_D = FCDiscriminator(num_classes=2, ndf = 64)
 
 
     def forward(self, A_l=None, B_l=None, target_l=None, A_ul=None, B_ul=None, target_ul=None, curr_iter=None, epoch=None):
@@ -80,6 +92,8 @@ class SemiCDNet_TGRS21(BaseModel):
         else:
             loss_sup = self.sup_loss(output_l, target_l, curr_iter=curr_iter, epoch=epoch) * self.sup_loss_w
 
+
+
         # If supervised mode only, return
         if self.mode == 'supervised':
             curr_losses = {'loss_sup': loss_sup}
@@ -93,12 +107,29 @@ class SemiCDNet_TGRS21(BaseModel):
             x_ul      = self.encoder(A_ul, B_ul)
             output_ul = self.main_decoder(x_ul)
 
-            # Compute unsupervised loss
-            loss_Ds = self.unsuper_loss(self.Ds(torch.unsqueeze(target_l,1)), torch.ones(output_l.size(0),1,1).type(torch.LongTensor).cuda()) + self.unsuper_loss(self.Ds(torch.argmax(output_ul.detach(), dim=1, keepdim=True)), torch.zeros(output_ul.size(0),1,1).type(torch.LongTensor).cuda())
-            E_l     =  F.softmax(output_l.detach(), dim=1)*torch.log(F.softmax(output_l.detach(), dim=1)+1e-6)
-            E_ul    =  F.softmax(output_ul.detach(), dim=1)*torch.log(F.softmax(output_ul.detach(), dim=1)+1e-6)
-            loss_De   = self.unsuper_loss(self.De(E_l), torch.ones(output_l.size(0),1,1).type(torch.LongTensor).cuda()) + self.unsuper_loss(self.De(E_ul), torch.zeros(output_ul.size(0),1,1).type(torch.LongTensor).cuda())
-            loss_unsup = loss_Ds  + loss_De
+            # Compute adversarial loss
+            pred_remain = output_ul.detach()
+            D_out       = self.model_D(F.softmax(output_ul))
+            D_out_sigmoid = F.sigmoid(D_out).data.cpu().numpy().squeeze(axis=1)
+            ignore_mask_remain = np.zeros(D_out_sigmoid.shape).astype(np.bool)
+            loss_adv = bce_loss(D_out, make_D_label(1, ignore_mask_remain)).data.cpu().numpy()[0]
+
+            #Computing unsupervised loss
+            semi_ignore_mask = (D_out_sigmoid < 0.3)
+            semi_gt = output_ul.data.cpu().numpy().argmax(axis=1)
+            semi_gt[semi_ignore_mask] = 255
+
+            semi_ratio = 1.0 - float(semi_ignore_mask.sum())/semi_ignore_mask.size
+            if semi_ratio == 0.0:
+                loss_semi_value += 0
+            else:
+                semi_gt = torch.FloatTensor(semi_gt)
+                
+                loss_semi = loss_calc(output_ul, semi_gt)
+                loss_semi = loss_semi
+                loss_semi_value += loss_semi.data.cpu().numpy()[0]
+
+            loss_unsup = loss_adv+ loss_semi_value
             curr_losses = {'loss_sup': loss_sup}
 
             if output_ul.shape != A_ul.shape:
@@ -119,7 +150,7 @@ class SemiCDNet_TGRS21(BaseModel):
     def get_other_params(self):
         if self.mode == 'semi':
             return chain(self.encoder.get_module_params(), self.main_decoder.parameters(), 
-                        self.Ds.parameters(), self.De.parameters())
+                        self.model_D.parameters())
 
         return chain(self.encoder.get_module_params(), self.main_decoder.parameters())
 
