@@ -78,7 +78,7 @@ def compute_argmax_map(output):
     output = output.transpose((1,2,0))
     output = np.asarray(np.argmax(output, axis=2), dtype=np.int)
     output = torch.from_numpy(output).float()
-    return 
+    return output
 
 def find_good_maps(D_outs, pred_all):
     count = 0
