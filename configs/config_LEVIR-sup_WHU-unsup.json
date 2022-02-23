@@ -1,6 +1,6 @@
 {
-    "name": "SemiCDNet-TGRS21-LEVIR(sup)-WHU(unsup)",
-    "experim_name": "TGRS21_(LEVIR-sup-10)_(WHU-unsup)",
+    "name": "AdvNet-LEVIR(sup)-WHU(unsup)",
+    "experim_name": "AdvNet_(LEVIR-sup-10)_(WHU-unsup)",
     "sup_percent": 10,
     "unsup_percent": 100,
     "n_total_lbl": 7120,

@@ -1,6 +1,6 @@
 {
-    "name": "SemiCD-DSIFN-CD",
-    "experim_name": "SemiCD_DSIFN_(sup)_40",
+    "name": "AdvNet-DSIFN-CD",
+    "experim_name": "AdvNet_DSIFN_(sup)_40",
     "sup_percent": 40,
     "n_total_lbl": 14400,
     "n_gpu": 1,

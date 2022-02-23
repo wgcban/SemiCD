@@ -1,6 +1,6 @@
 {
-    "name": "SemiCDNet-TGRS21-WHU-CD",
-    "experim_name": "TGRS21_(semi)_60",
+    "name": "AdvNet-WHU-CD",
+    "experim_name": "AdvNet_(semi)_60",
     "sup_percent":60,
     "unsup_percent":60,
     "n_gpu": 1,
