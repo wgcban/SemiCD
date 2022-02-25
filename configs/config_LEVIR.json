@@ -1,8 +1,8 @@
 {
-    "name": "SemiCD-LEVIR-CD",
-    "experim_name": "SemiCD_(sup)_100",
-    "sup_percent":100,
-    "unsup_percent":100,
+    "name": "SemiCD-Abaltion-Study-on-different-perturbations",
+    "experim_name": "feature-noise",
+    "sup_percent":10,
+    "unsup_percent":10,
     "n_total_lbl": 7120,
     "n_gpu": 1,
     "diff_lrs": true,
@@ -14,8 +14,8 @@
     "pretrained": true,
 
     "model":{
-        "supervised": true,
-        "semi": false,
+        "supervised": false,
+        "semi": true,
         "supervised_w": 1,
 
         "sup_loss": "CE",
@@ -27,20 +27,20 @@
         "confidence_masking": false,
         "confidence_th": 0.5,
 
-        "drop": 5,
+        "drop": 0,
         "drop_rate": 0.5,
         "spatial": true,
     
-        "cutout": 5,
+        "cutout": 0,
         "erase": 0.4,
     
-        "vat": 2,
+        "vat": 0,
         "xi": 1e-6,
         "eps": 2.0,
 
-        "context_masking": 2,
-        "object_masking": 2,
-        "feature_drop": 5,
+        "context_masking": 0,
+        "object_masking": 0,
+        "feature_drop": 0,
 
         "feature_noise": 5,
         "uniform_range": 0.3
@@ -97,14 +97,14 @@
 
     "trainer": {
         "epochs": 80,
-        "save_dir": "/media/lidan/ssd2/SemiCD/saved/LEVIR-CD",
+        "save_dir": "/media/lidan/ssd2/SemiCD/saved/LEVIR-CD/ablations",
         "save_period": 5,
   
         "monitor": "max Mean_IoU",
         "early_stop": 10,
         
         "tensorboardX": true,
-        "log_dir": "/media/lidan/ssd2/SemiCD/saved/LEVIR-CD",
+        "log_dir": "/media/lidan/ssd2/SemiCD/saved/LEVIR-CD/ablations",
         "log_per_iter": 20,
 
         "val": true,
