@@ -1,8 +1,8 @@
 {
     "name": "SemiCD-WHU-CD",
-    "experim_name": "SemiCD_(semi)_10",
-    "sup_percent":10,
-    "unsup_percent":10,
+    "experim_name": "SemiCD_(sup)_5",
+    "sup_percent":5,
+    "unsup_percent":5,
     "n_gpu": 1,
     "diff_lrs": true,
     "ramp_up": 0.1,
@@ -13,8 +13,8 @@
     "pretrained": true,
 
     "model":{
-        "supervised": false,
-        "semi": true,
+        "supervised": true,
+        "semi": false,
         "supervised_w": 1,
 
         "sup_loss": "CE",
