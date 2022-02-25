@@ -96,14 +96,14 @@
 
     "trainer": {
         "epochs": 80,
-        "save_dir": "/media/lidan/ssd2/SemiCD/saved/WHU-CD",
+        "save_dir": "/media/lidan/ssd2/SemiCD/saved/WHU-CD/AdvNet",
         "save_period": 5,
   
         "monitor": "max Mean_IoU",
         "early_stop": 10,
         
         "tensorboardX": true,
-        "log_dir": "/media/lidan/ssd2/SemiCD/saved/WHU-CD",
+        "log_dir": "/media/lidan/ssd2/SemiCD/saved/WHU-CD/AdvNet",
         "log_per_iter": 20,
 
         "val": true,
