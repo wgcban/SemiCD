@@ -65,7 +65,7 @@ def main(config, resume):
 if __name__=='__main__':
     # PARSE THE ARGS
     parser = argparse.ArgumentParser(description='PyTorch Training')
-    parser.add_argument('-c', '--config', default='configs/config_WHU.json',type=str,
+    parser.add_argument('-c', '--config', default='configs/config_LEVIR.json',type=str,
                         help='Path to the config file')
     parser.add_argument('-r', '--resume', default=None, type=str,
                         help='Path to the .pth model checkpoint to resume training')
