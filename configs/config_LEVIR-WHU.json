@@ -73,7 +73,7 @@
     "train_unsupervised": {
         "data_dir": "/media/lidan/ssd2/CDData/WHU-CD-256",
         "weak_labels_output": "pseudo_labels",
-        "batch_size": 77777,
+        "batch_size": 7,
         "crop_size": 256,
         "shuffle": true,
         "base_size": 256,
