@@ -1,6 +1,6 @@
 {
     "name": "SemiCD-WHU-CD",
-    "experim_name": "SemiCD_(sup)_5",
+    "experim_name": "SemiCD_(semi)_5",
     "sup_percent":5,
     "unsup_percent":5,
     "n_gpu": 1,
@@ -13,8 +13,8 @@
     "pretrained": true,
 
     "model":{
-        "supervised": true,
-        "semi": false,
+        "supervised": false,
+        "semi": true,
         "supervised_w": 1,
 
         "sup_loss": "CE",
@@ -96,14 +96,14 @@
 
     "trainer": {
         "epochs": 80,
-        "save_dir": "/media/lidan/ssd2/SemiCD/saved/WHU-CD",
+        "save_dir": "/media/lidan/ssd2/SemiCD/saved/WHU-CD/ours",
         "save_period": 5,
   
         "monitor": "max Mean_IoU",
         "early_stop": 10,
         
         "tensorboardX": true,
-        "log_dir": "/media/lidan/ssd2/SemiCD/saved/WHU-CD",
+        "log_dir": "/media/lidan/ssd2/SemiCD/saved/WHU-CD/ours",
         "log_per_iter": 20,
 
         "val": true,
