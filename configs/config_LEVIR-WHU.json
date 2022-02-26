@@ -1,7 +1,7 @@
 {
     "name": "AdvNet-LEVIR(sup)-WHU(unsup)",
     "experim_name": "AdvNet(LEVIR-5)(WHU)",
-    "sup_percent": 10,
+    "sup_percent": 5,
     "unsup_percent": 100,
     "n_total_lbl": 7120,
     "n_gpu": 1,
