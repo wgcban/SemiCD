@@ -1,6 +1,6 @@
 {
     "name": "SemiCD-Abaltion-Study-on-different-perturbations",
-    "experim_name": "feature-noise",
+    "experim_name": "feature-noise+FD",
     "sup_percent":10,
     "unsup_percent":10,
     "n_total_lbl": 7120,
@@ -40,7 +40,7 @@
 
         "context_masking": 0,
         "object_masking": 0,
-        "feature_drop": 0,
+        "feature_drop": 5,
 
         "feature_noise": 5,
         "uniform_range": 0.3
