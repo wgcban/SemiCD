@@ -65,7 +65,7 @@ def main():
     # CONFIG
     assert args.config
     config = json.load(open(args.config))
-    scales = [1.0]
+    scales = [1.0,1.25]
 
     # DATA LOADER
     config['val_loader']["batch_size"]  = 1
@@ -150,9 +150,9 @@ def main():
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='PyTorch Training')
-    parser.add_argument('--config', default='/media/lidan/ssd2/SemiCD/saved/LEVIR-WHU-CD/SemiCD_(LEVIR-sup-100)_(WHU-unsup)/config.json',type=str,
+    parser.add_argument('--config', default='/media/lidan/ssd2/SemiCD/saved/WHU-CD/ours/SemiCD_(semi)_5/config.json',type=str,
                         help='Path to the config file')
-    parser.add_argument( '--model', default='/media/lidan/ssd2/SemiCD/saved/LEVIR-WHU-CD/SemiCD_(LEVIR-sup-100)_(WHU-unsup)/best_model.pth', type=str,
+    parser.add_argument( '--model', default='/media/lidan/ssd2/SemiCD/saved/WHU-CD/ours/SemiCD_(semi)_5/best_model.pth', type=str,
                         help='Path to the trained .pth model')
     parser.add_argument( '--save', action='store_true', help='Save images')
     parser.add_argument('--Dataset_Path', default="/media/lidan/ssd2/CDData/LEVIR-CD256", type=str,
