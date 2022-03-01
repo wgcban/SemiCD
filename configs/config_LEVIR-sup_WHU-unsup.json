@@ -1,7 +1,7 @@
 {
     "name": "s4GAN-LEVIR(sup)-WHU(unsup)",
-    "experim_name": "s4GAN_(LEVIR-sup5)_(WHU-unsup)",
-    "sup_percent": 5,
+    "experim_name": "s4GAN_(LEVIR-sup40)_(WHU-unsup)",
+    "sup_percent": 40,
     "unsup_percent": 100,
     "n_total_lbl": 7120,
     "n_gpu": 1,
@@ -97,14 +97,14 @@
 
     "trainer": {
         "epochs": 80,
-        "save_dir": "/media/lidan/ssd2/SemiCD/saved/LEVIR-WHU-CD",
+        "save_dir": "/media/lidan/ssd2/SemiCD/saved/LEVIR-WHU/s4GAN",
         "save_period": 5,
   
         "monitor": "max Mean_IoU",
         "early_stop": 10,
         
         "tensorboardX": true,
-        "log_dir": "/media/lidan/ssd2/SemiCD/saved/LEVIR-WHU-CD",
+        "log_dir": "/media/lidan/ssd2/SemiCD/saved/LEVIR-WHU/s4GAN",
         "log_per_iter": 20,
 
         "val": true,
