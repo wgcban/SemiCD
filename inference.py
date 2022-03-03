@@ -150,9 +150,9 @@ def main():
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='PyTorch Training')
-    parser.add_argument('--config', default='/media/lidan/ssd2/SemiCD/saved/LEVIR-CD/ablations/feature-noise+FD+cutout/config.json',type=str,
+    parser.add_argument('--config', default='/media/lidan/ssd2/SemiCD/saved/LEVIR-CD/ablations/feature-noise+FD+cutout+con_obj/config.json',type=str,
                         help='Path to the config file')
-    parser.add_argument( '--model', default='/media/lidan/ssd2/SemiCD/saved/LEVIR-CD/ablations/feature-noise+FD+cutout/best_model.pth', type=str,
+    parser.add_argument( '--model', default='/media/lidan/ssd2/SemiCD/saved/LEVIR-CD/ablations/feature-noise+FD+cutout+con_obj/best_model.pth', type=str,
                         help='Path to the trained .pth model')
     parser.add_argument( '--save', action='store_true', help='Save images')
     parser.add_argument('--Dataset_Path', default="/media/lidan/ssd2/CDData/LEVIR-CD256", type=str,
