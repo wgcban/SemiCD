@@ -150,12 +150,12 @@ def main():
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='PyTorch Training')
-    parser.add_argument('--config', default='/media/lidan/ssd2/SemiCD/saved/LEVIR-CD/TGRS21_(semi)_60/config.json',type=str,
+    parser.add_argument('--config', default='/media/lidan/ssd2/SemiCD/saved/LEVIR-WHU/s4GAN/s4GAN_(LEVIR-sup100)_(WHU-unsup)/config.json',type=str,
                         help='Path to the config file')
-    parser.add_argument( '--model', default='/media/lidan/ssd2/SemiCD/saved/LEVIR-CD/TGRS21_(semi)_60/best_model.pth', type=str,
+    parser.add_argument( '--model', default='/media/lidan/ssd2/SemiCD/saved/LEVIR-WHU/s4GAN/s4GAN_(LEVIR-sup100)_(WHU-unsup)/best_model.pth', type=str,
                         help='Path to the trained .pth model')
     parser.add_argument( '--save', action='store_true', help='Save images')
-    parser.add_argument('--Dataset_Path', default="/media/lidan/ssd2/CDData/WHU-CD-256", type=str,
+    parser.add_argument('--Dataset_Path', default="/media/lidan/ssd2/CDData/LEVIR-CD256", type=str,
                         help='Path to dataset LEVIR-CD')
     args = parser.parse_args()
     return args
