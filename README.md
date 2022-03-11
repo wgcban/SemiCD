@@ -35,13 +35,11 @@ python train.py --config configs/config_LEVIR.json
 
 | Setting | Required settings in config file |
 | --- | --- |
-
 | Supervised - 5% labeled data | Experiment name: `SemiCD_(semi)_5`, sup_percent= '5', model.supervised=`True`, model.semi=`False` |
 | Supervised - 10% labeled data | Experiment name: `SemiCD_(semi)_10`, sup_percent= '5', model.supervised=`True`, model.semi=`False` |
 | Supervised - 20% labeled data | Experiment name: `SemiCD_(semi)_20`, sup_percent= '5', model.supervised=`True`, model.semi=`False` |
 | Supervised - 40% labeled data | Experiment name: `SemiCD_(semi)_40`, sup_percent= '5', model.supervised=`True`, model.semi=`False` |
 | Supervised - 100% labeled data | Experiment name: `SemiCD_(semi)_100`, sup_percent= '5', model.supervised=`True`, model.semi=`False` |
-
 | `git diff` | Show file differences that **haven't been** staged |
 
 
