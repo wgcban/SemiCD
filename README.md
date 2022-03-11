@@ -33,7 +33,7 @@ Then simply run:
 python train.py --config configs/config_LEVIR.json
 ```
 
-| Setting | Required settings in config file |
+| Setting | Required changes in `config_LEVIR.json` file |
 | --- | --- |
 | Supervised - 5% labeled data | Experiment name: `SemiCD_(sup)_5`, sup_percent= `5`, model.supervised=`True`, model.semi=`False` |
 | Supervised - 10% labeled data | Experiment name: `SemiCD_(sup)_10`, sup_percent= `10`, model.supervised=`True`, model.semi=`False` |
