@@ -91,9 +91,15 @@ Here are the flags available for inference:
 --config       The config file used for training the model.
 ```
 
-### Pre-trained models
+### Pre-trained models on
 
-Pre-trained models can be downloaded [here]().
+Pre-trained models can be downloaded from the following links.
+
+Pre-trained models on LEVIR-CD can be downloaded from [here](https://www.dropbox.com/sh/0m8t6dq37f11ukx/AAAgTgIxr_eyJJeHWqZ_SRVYa?dl=0). 
+
+Pre-trained models on WHU-CD can be downloaded from [here](https://www.dropbox.com/sh/oyn3d8hyz6qnzm5/AAAct3ueZ39xYINQbbO0oSJ_a?dl=0). 
+
+Pre-trained models for cross-dataset experiments can be downloaded from [here](https://www.dropbox.com/sh/mvszluw944jvhc3/AAB-eR-stgVsjmNSvzZ5Hlqqa?dl=0).
 
 ### Citation
 
