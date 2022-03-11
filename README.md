@@ -27,7 +27,7 @@ The processed WHU-CD dataset and supervised-unsupervised splits can be downloade
 
 To train a model, first download te daaasets detailed above and proces  to crate different splits, then set `data_dir` to the dataset path in the config file in `configs/config.json` and set the rest of the parameters, like the number of GPUs, cope size, data augmentation ... etc ,you can also change if you wish, more details below. 
 
-## Training on LEVIR-CD dataset
+#### Training on LEVIR-CD dataset
 Then simply run:
 
 | Command | Description |
