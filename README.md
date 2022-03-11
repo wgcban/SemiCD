@@ -19,12 +19,21 @@ pip install -r requirements.txt
 ### Datasets
 We use two publicly available, widely-used CD datasets for our experiments, namely LEVIR-CD and WHU-CD. The LEVIR-CD and WHU-CD are building CD datasets.
 
+The processed LEVIR-CD dataset and supervised-unsupervised splits can be downloaded [here](https://www.dropbox.com/sh/qxp2t98qpesouiy/AAD1Xr7-XPajzvyQfzPA1LKAa?dl=0)
+
+The processed WHU-CD dataset and supervised-unsupervised splits can be downloaded [here](https://www.dropbox.com/sh/5qdnav1w7pmd74t/AABx_mLdj1MHj1SP2Djxgdf1a?dl=0)
 
 ### Training
 
 To train a model, first download te daaasets detailed above and proces  to crate different splits, then set `data_dir` to the dataset path in the config file in `configs/config.json` and set the rest of the parameters, like the number of GPUs, cope size, data augmentation ... etc ,you can also change if you wish, more details below. 
 
+## Training on LEVIR-CD dataset
 Then simply run:
+
+| Command | Description |
+| --- | --- |
+| `git status` | List all *new or modified* files |
+| `git diff` | Show file differences that **haven't been** staged |
 
 ```bash
 python train.py --config configs/config_LEVIR.json
