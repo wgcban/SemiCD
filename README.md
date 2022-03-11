@@ -40,12 +40,11 @@ python train.py --config configs/config_LEVIR.json
 | Supervised - 20% labeled data | Experiment name: `SemiCD_(semi)_20`, sup_percent= `20`, model.supervised=`True`, model.semi=`False` |
 | Supervised - 40% labeled data | Experiment name: `SemiCD_(semi)_40`, sup_percent= `40`, model.supervised=`True`, model.semi=`False` |
 | Supervised - 100% labeled data | Experiment name: `SemiCD_(semi)_100`, sup_percent= `100`, model.supervised=`True`, model.semi=`False` |
-| --- | --- |
-| Supervised - 5% labeled data | Experiment name: `SemiCD_(semi)_5`, sup_percent= `5`, model.supervised=`True`, model.semi=`False` |
-| Supervised - 10% labeled data | Experiment name: `SemiCD_(semi)_10`, sup_percent= `10`, model.supervised=`True`, model.semi=`False` |
-| Supervised - 20% labeled data | Experiment name: `SemiCD_(semi)_20`, sup_percent= `20`, model.supervised=`True`, model.semi=`False` |
-| Supervised - 40% labeled data | Experiment name: `SemiCD_(semi)_40`, sup_percent= `40`, model.supervised=`True`, model.semi=`False` |
-| Supervised - 100% labeled data | Experiment name: `SemiCD_(semi)_100`, sup_percent= `100`, model.supervised=`True`, model.semi=`False` |
+|  |  |
+| Semi-upervised - 5% labeled data | Experiment name: `SemiCD_(semi)_5`, sup_percent= `5`, model.supervised=`Flase`, model.semi=`True` |
+| Semi-upervised - 10% labeled data | Experiment name: `SemiCD_(semi)_10`, sup_percent= `10`, model.supervised=`Flase`, model.semi=`True` |
+| Semi-upervised - 20% labeled data | Experiment name: `SemiCD_(semi)_20`, sup_percent= `20`, model.supervised=`Flase`, model.semi=`True` |
+| Semi-upervised - 40% labeled data | Experiment name: `SemiCD_(semi)_40`, sup_percent= `40`, model.supervised=`Flase`, model.semi=`True` |
 
 
 The log files and the `.pth` checkpoints will be saved in `saved\EXP_NAME`, to monitor the training using tensorboard, please run:
