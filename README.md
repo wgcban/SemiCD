@@ -1,28 +1,25 @@
-
-
 ## SS-CD: Semi-Supervised Change Detection in Remote Sensing Images via Consistency Regularization
 
 #### [Paper]()
 
-This repocitory contains the official implementation of our paper:Semi-Supervised Change Detection in Remote Sensing Images via Consistency Regularization.
+This repocitory contains the official implementation of our paper:  Revisiting Consistency Regularization for Semi-supervised Change Detection in Remote Sensing Images.
 
 <p align="center"><img src="./imgs/method.jpg" width="900"></p>
 
 ### Requirements
 
-This repo was tested with Ubuntu 18.04.3 LTS, Python 3.7, PyTorch 1.1.0, and CUDA 10.0. But it should be runnable with recent PyTorch versions >=1.1.0.
+This repo was tested with `Ubuntu 18.04.3 LTS`, `Python 3.7`, `PyTorch 1.1.0`, and `CUDA 10.0`. But it should be runnable with recent PyTorch versions >=1.1.0.
 
 The required packages are `pytorch` and `torchvision`, together with `PIL` and `opencv` for data-preprocessing and `tqdm` for showing the training progress.
-With some additional modules like `dominate` to save the results in the form of HTML files. To setup the necessary modules, simply run:
 
 ```bash
 pip install -r requirements.txt
 ```
 
 ### Dataset
+## LEVIR-CD
 
-In this repo, we use **Pascal VOC**, to obtain it, first download the [original dataset](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar), after extracting the files we'll end up with `VOCtrainval_11-May-2012/VOCdevkit/VOC2012` containing the image sets, the XML annotation for both object detection and segmentation, and JPEG images.\
-The second step is to augment the dataset using the additionnal annotations provided by [Semantic Contours from Inverse Detectors](http://home.bharathh.info/pubs/pdfs/BharathICCV2011.pdf). Download the rest of the annotations [SegmentationClassAug](https://www.dropbox.com/s/oeu149j8qtbs1x0/SegmentationClassAug.zip?dl=0) and add them to the path `VOCtrainval_11-May-2012/VOCdevkit/VOC2012`, now we're set, for training use the path to `VOCtrainval_11-May-2012`.
+## WHU-CD
 
 
 ### Training
