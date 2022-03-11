@@ -46,6 +46,19 @@ python train.py --config configs/config_LEVIR.json
 | Semi-upervised - 20% labeled data | Experiment name: `SemiCD_(semi)_20`, sup_percent= `20`, model.supervised=`Flase`, model.semi=`True` |
 | Semi-upervised - 40% labeled data | Experiment name: `SemiCD_(semi)_40`, sup_percent= `40`, model.supervised=`Flase`, model.semi=`True` |
 
+#### Training on WHU-CD dataset
+Please follow the same changes that we outlined above to WHU-CD dataset as well. 
+Then simply run:
+```bash
+python train.py --config configs/config_WHU.json
+```
+
+#### Training with cross-domain data (i.e., LEVIR as supervised and WHU as unsupervised datasets)
+Please follow the same changes that we outlined above to WHU-CD dataset as well. 
+Then simply run:
+```bash
+python train.py --config configs/config_WHU.json
+```
 
 The log files and the `.pth` checkpoints will be saved in `saved\EXP_NAME`, to monitor the training using tensorboard, please run:
 
