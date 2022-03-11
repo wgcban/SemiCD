@@ -29,15 +29,16 @@ To train a model, first download te daaasets detailed above and proces  to crate
 
 #### Training on LEVIR-CD dataset
 Then simply run:
-
-| Command | Description |
-| --- | --- |
-| `git status` | List all *new or modified* files |
-| `git diff` | Show file differences that **haven't been** staged |
-
 ```bash
 python train.py --config configs/config_LEVIR.json
 ```
+
+| Setting | Required modifications in config file |
+| --- | --- |
+| Supervised - 5% labeled data | List all *new or modified* files |
+| `git diff` | Show file differences that **haven't been** staged |
+
+
 
 The log files and the `.pth` checkpoints will be saved in `saved\EXP_NAME`, to monitor the training using tensorboard, please run:
 
