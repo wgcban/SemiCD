@@ -1,5 +1,7 @@
 ## SS-CD: Semi-Supervised Change Detection in Remote Sensing Images via Consistency Regularization
 
+Under review at ECCV-22.
+
 #### [Paper]()
 
 This repocitory contains the official implementation of our paper:  Revisiting Consistency Regularization for Semi-supervised Change Detection in Remote Sensing Images.
