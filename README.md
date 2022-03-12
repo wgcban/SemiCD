@@ -51,7 +51,7 @@ The following table summarizes the **required changes** in ``config`` file to tr
 | Supervised - 10% labeled data | Experiment name: `SemiCD_(sup)_10`, sup_percent= `10`, model.supervised=`True`, model.semi=`False` |
 | Supervised - 20% labeled data | Experiment name: `SemiCD_(sup)_20`, sup_percent= `20`, model.supervised=`True`, model.semi=`False` |
 | Supervised - 40% labeled data | Experiment name: `SemiCD_(sup)_40`, sup_percent= `40`, model.supervised=`True`, model.semi=`False` |
-| Supervised - 100% labeled data | Experiment name: `SemiCD_(sup)_100`, sup_percent= `100`, model.supervised=`True`, model.semi=`False` |
+| Supervised - 100% labeled data (**Oracle**) | Experiment name: `SemiCD_(sup)_100`, sup_percent= `100`, model.supervised=`True`, model.semi=`False` |
 |  |  |
 | Semi-upervised - 5% labeled data | Experiment name: `SemiCD_(semi)_5`, sup_percent= `5`, model.supervised=`Flase`, model.semi=`True` |
 | Semi-upervised - 10% labeled data | Experiment name: `SemiCD_(semi)_10`, sup_percent= `10`, model.supervised=`Flase`, model.semi=`True` |
