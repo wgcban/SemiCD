@@ -15,11 +15,19 @@ This repo was tested with `Ubuntu 18.04.3 LTS`, `Python 3.7`, `PyTorch 1.1.0`, a
 The required packages are `pytorch` and `torchvision`, together with `PIL` and `opencv` for data-preprocessing and `tqdm` for showing the training progress.
 
 ```bash
+conda create -n SemiCD python=3.8
+
+conda activate SemiCD
+
 pip install -r requirements.txt
 ```
 
 ### Datasets
-We use two publicly available, widely-used CD datasets for our experiments, namely LEVIR-CD and WHU-CD. The LEVIR-CD and WHU-CD are building CD datasets.
+We use two publicly available, widely-used CD datasets for our experiments, namely [LEVIR-CD](https://justchenhao.github.io/LEVIR/) and [WHU-CD](http://gpcv.whu.edu.cn/data/building_dataset.html). Note that LEVIR-CD and WHU-CD are building CD datasets.
+
+As we described in the paper, following previous works [ChangeFormer](https://github.com/wgcban/ChangeFormer) and [BIT-CD](https://github.com/justchenhao/BIT_CD) on supervised CD, we create non-overlapping patches of size 256x256 for the training. The dataset preparation code are written in MATLAB and can be found in ``dataset_preperation`` folder. These scripts will also generate supervised and unsupervised training scripts that we used to train the model under diffrent percentation of labeled data.
+
+Instead, you can directely download the processed LEVIR-CD and WHU-CD through the following links. Please these datasets anywhere you want and change the patch to each dataset in the corresponding ``config`` file.
 
 The processed LEVIR-CD dataset and supervised-unsupervised splits can be downloaded [here](https://www.dropbox.com/sh/qxp2t98qpesouiy/AAD1Xr7-XPajzvyQfzPA1LKAa?dl=0)
 
