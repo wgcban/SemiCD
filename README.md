@@ -4,7 +4,7 @@ Under review at ECCV-22.
 
 #### [Paper]()
 
-This repocitory contains the official implementation of our paper:  Revisiting Consistency Regularization for Semi-supervised Change Detection in Remote Sensing Images.
+This repocitory contains the official implementation of our paper:  **Revisiting Consistency Regularization for Semi-supervised Change Detection in Remote Sensing Images**.
 
 <p align="center"><img src="./imgs/method.jpg" width="900"></p>
 
