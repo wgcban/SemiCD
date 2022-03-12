@@ -8,7 +8,7 @@ This repocitory contains the official implementation of our paper:  **Revisiting
 
 <p align="center"><img src="./imgs/method.jpg" width="900"></p>
 
-### Requirements
+## Requirements
 
 This repo was tested with `Ubuntu 18.04.3 LTS`, `Python 3.7`, `PyTorch 1.1.0`, and `CUDA 10.0`. But it should be runnable with recent PyTorch versions >=1.1.0.
 
@@ -22,22 +22,22 @@ conda activate SemiCD
 pip install -r requirements.txt
 ```
 
-### Datasets
+## Datasets
 We use two publicly available, widely-used CD datasets for our experiments, namely [LEVIR-CD](https://justchenhao.github.io/LEVIR/) and [WHU-CD](http://gpcv.whu.edu.cn/data/building_dataset.html). Note that LEVIR-CD and WHU-CD are building CD datasets.
 
-As we described in the paper, following previous works [ChangeFormer](https://github.com/wgcban/ChangeFormer) and [BIT-CD](https://github.com/justchenhao/BIT_CD) on supervised CD, we create non-overlapping patches of size 256x256 for the training. The dataset preparation code are written in MATLAB and can be found in ``dataset_preperation`` folder. These scripts will also generate supervised and unsupervised training scripts that we used to train the model under diffrent percentation of labeled data.
+As we described in the paper, following previous works [ChangeFormer](https://github.com/wgcban/ChangeFormer) and [BIT-CD](https://github.com/justchenhao/BIT_CD) on supervised CD, we create non-overlapping patches of size 256x256 for the training. The dataset preparation codes are written in MATLAB and can be found in ``dataset_preperation`` folder. These scripts will also generate the supervised and unsupervised training scripts that we used to train the model under diffrent percentage of labeled data.
 
-Instead, you can directely download the processed LEVIR-CD and WHU-CD through the following links. Please these datasets anywhere you want and change the patch to each dataset in the corresponding ``config`` file.
+**Instead, you can directely download the processed LEVIR-CD and WHU-CD through the following links. Save these datasets anywhere you want and change the ``data_dir`` to each dataset in the corresponding ``config`` file.**
 
-The processed LEVIR-CD dataset and supervised-unsupervised splits can be downloaded [here](https://www.dropbox.com/sh/qxp2t98qpesouiy/AAD1Xr7-XPajzvyQfzPA1LKAa?dl=0)
+The processed LEVIR-CD dataset, and supervised-unsupervised splits can be downloaded [here](https://www.dropbox.com/sh/qxp2t98qpesouiy/AAD1Xr7-XPajzvyQfzPA1LKAa?dl=0).
 
-The processed WHU-CD dataset and supervised-unsupervised splits can be downloaded [here](https://www.dropbox.com/sh/5qdnav1w7pmd74t/AABx_mLdj1MHj1SP2Djxgdf1a?dl=0)
+The processed WHU-CD dataset, and supervised-unsupervised splits can be downloaded [here](https://www.dropbox.com/sh/5qdnav1w7pmd74t/AABx_mLdj1MHj1SP2Djxgdf1a?dl=0).
 
-### Training
+## Training
 
 To train a model, first download te daaasets detailed above and proces  to crate different splits, then set `data_dir` to the dataset path in the config file in `configs/config.json` and set the rest of the parameters, like the number of GPUs, cope size, data augmentation ... etc ,you can also change if you wish, more details below. 
 
-#### Training on LEVIR-CD dataset
+### Training on LEVIR-CD dataset
 Then simply run:
 ```bash
 python train.py --config configs/config_LEVIR.json
@@ -56,14 +56,14 @@ python train.py --config configs/config_LEVIR.json
 | Semi-upervised - 20% labeled data | Experiment name: `SemiCD_(semi)_20`, sup_percent= `20`, model.supervised=`Flase`, model.semi=`True` |
 | Semi-upervised - 40% labeled data | Experiment name: `SemiCD_(semi)_40`, sup_percent= `40`, model.supervised=`Flase`, model.semi=`True` |
 
-#### Training on WHU-CD dataset
+### Training on WHU-CD dataset
 Please follow the same changes that we outlined above to WHU-CD dataset as well. 
 Then simply run:
 ```bash
 python train.py --config configs/config_WHU.json
 ```
 
-#### Training with cross-domain data (i.e., LEVIR as supervised and WHU as unsupervised datasets)
+### Training with cross-domain data (i.e., LEVIR as supervised and WHU as unsupervised datasets)
 Please follow the same changes that we outlined above to WHU-CD dataset as well. 
 Then simply run:
 ```bash
@@ -85,7 +85,7 @@ python train.py --config configs/config_LEVIR.json --resume saved/SemiCD/checkpo
 **Results**: The results will be saved in `saved` as an html file, containing the validation results,
 and the name it will take is `experim_name` specified in `configs/config_LEVIR.json`.
 
-### Inference
+## Inference
 
 For inference, we need a pretrained model, the pre-chage and pos-change imags that we wouldlike to dtet changes and the config used in training (to load the correct model and other parameters), 
 
@@ -101,7 +101,7 @@ Here are the flags available for inference:
 --config       The config file used for training the model.
 ```
 
-### Pre-trained models on
+## Pre-trained models on
 
 Pre-trained models can be downloaded from the following links.
 
@@ -111,7 +111,7 @@ Pre-trained models on WHU-CD can be downloaded from [here](https://www.dropbox.c
 
 Pre-trained models for cross-dataset experiments can be downloaded from [here](https://www.dropbox.com/sh/mvszluw944jvhc3/AAB-eR-stgVsjmNSvzZ5Hlqqa?dl=0).
 
-### Citation
+## Citation
 
 If you find this repo useful for your research, please consider citing the paper as follows:
 
