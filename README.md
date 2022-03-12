@@ -10,7 +10,7 @@ This repocitory contains the official implementation of our paper:  **Revisiting
 
 ## Requirements
 
-This repo was tested with `Ubuntu 18.04.3 LTS`, `Python 3.7`, `PyTorch 1.1.0`, and `CUDA 10.0`. But it should be runnable with recent PyTorch versions >=1.1.0.
+This repo was tested with `Ubuntu 18.04.3 LTS`, `Python 3.8`, `PyTorch 1.1.0`, and `CUDA 10.0`. But it should be runnable with recent PyTorch versions >=1.1.0.
 
 The required packages are `pytorch` and `torchvision`, together with `PIL` and `opencv` for data-preprocessing and `tqdm` for showing the training progress.
 
