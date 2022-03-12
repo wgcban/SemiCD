@@ -35,13 +35,15 @@ The processed WHU-CD dataset, and supervised-unsupervised splits can be download
 
 ## Training
 
-To train a model, first download processed dataset above and save them in any directory you want, then set `data_dir` to the dataset path in the config file in ``configs/config_LEVIR.json``/``configs/config_WHU.json`` and set the rest of the parameters, like ``experim_name``, ``sup_percent``, ``unsup_percent``, ``supervised``, ``semi``, ``save_dir``, ``log_dir`` ... etc ,you can also change if you wish, more details below. 
+To train a model, first download processed dataset above and save them in any directory you want, then set `data_dir` to the dataset path in the config file in ``configs/config_LEVIR.json``/``configs/config_WHU.json`` and set the rest of the parameters, like ``experim_name``, ``sup_percent``, ``unsup_percent``, ``supervised``, ``semi``, ``save_dir``, ``log_dir`` ... etc., more details below. 
 
 ### Training on LEVIR-CD dataset
 Then simply run:
 ```bash
 python train.py --config configs/config_LEVIR.json
 ```
+
+The following table summarizes the **required changes** in ``config`` file to train a model ``supervised`` or ``unsupervised`` with different percentage of labeled data. 
 
 | Setting | Required changes in `config_LEVIR.json` file |
 | --- | --- |
