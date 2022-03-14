@@ -208,7 +208,7 @@ class Trainer(BaseTrainer):
         if "pair_wise" in cur_losses.keys():
             self.pair_wise.update(cur_losses['pair_wise'].mean().item())
         if "loss_ss" in cur_losses.keys():
-            self.pair_wise.update(cur_losses['loss_ss'].mean().item())
+            self.loss_ss.update(cur_losses['loss_ss'].mean().item())
 
 
 

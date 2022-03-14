@@ -1,6 +1,6 @@
 {
     "name": "Temporal-Rotation-SS-LEVIR-CD",
-    "experim_name": "RoCo(4bins)_5",
+    "experim_name": "RoCo(18bins)_5",
     "sup_percent":5,
     "unsup_percent":5,
     "n_total_lbl": 7120,
@@ -12,7 +12,8 @@
     "use_weak_lables":false,
     "weakly_loss_w": 0.4,
     "pretrained": true,
-    "N_temp_rots": 4,
+    "N_temp_rots": 18,
+    "weight_ss": 0.2,
 
     "model":{
         "supervised": false,
