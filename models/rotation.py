@@ -13,13 +13,12 @@ class RotationPredHead(nn.Module):
     def __init__(self, emb_dim, N_temp_rots):
         super(RotationPredHead, self).__init__()
         self.pool = torch.nn.AdaptiveAvgPool2d((1))
-        self.head = nn.ModuleList(
-            nn.Sequential(nn.Linear(2*emb_dim, emb_dim), 
-            nn.ReLU(), 
-            nn.Linear(emb_dim, N_temp_rots))
-            )
+        self.linear1 = torch.nn.Linear(2*emb_dim, emb_dim)
+        self.relu = torch.nn.ReLU()
+        self.linear2 = torch.nn.Linear(emb_dim, N_temp_rots)
 
     def forward(self, z_a, z_b):
         z = torch.cat((torch.squeeze(self.pool(z_a)), torch.squeeze(self.pool(z_b))), dim=1)
-        r = self.head(z)
+        z = self.relu(self.linear1(z))
+        r = self.linear2(z)
         return r

@@ -1,3 +1,4 @@
+from configparser import Interpolation
 import random, math
 import numpy as np
 import cv2
@@ -65,12 +66,10 @@ class BaseDataSet(Dataset):
     def _temporal_rotation(self, image):
         h, w, _ = image.shape
 
-        bin = random.randint(0, self.N_temp_rots)
+        bin = random.randint(0, self.N_temp_rots-1)
         angle   = 360*bin/self.N_temp_rots
 
-        center = (w / 2, h / 2)
-        rot_matrix = cv2.getRotationMatrix2D(center, angle, 1.0)
-        image = cv2.warpAffine(image, rot_matrix, (w, h), flags=cv2.INTER_CUBIC)#, borderMode=cv2.BORDER_REFLECT)
+        image = transforms.functional.rotate(image, angle=angle)
         return image, bin
 
     def _crop(self, image_A, image_B, label):   

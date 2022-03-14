@@ -14,7 +14,7 @@ from utils.losses import CE_loss
 
 class Consistency_ResNet50_CD(BaseModel):
     def __init__(self, num_classes, conf, sup_loss=None, cons_w_unsup=None, testing=False,
-            pretrained=True, use_weak_lables=False, weakly_loss_w=0.4):
+            pretrained=True, use_weak_lables=False, weakly_loss_w=0.4, N_temp_rots=None):
 
         self.num_classes = num_classes
         if not testing:
@@ -89,8 +89,8 @@ class Consistency_ResNet50_CD(BaseModel):
         
         if self.mode_ss:
             print('Self supervised rotation prediction also innncluded in the semi-supervised CD.')
-            self.N_temp_rots = conf['N_temp_rots']
-            self.RotationLoss = torch.nn.CrossEntropyLoss()
+            self.N_temp_rots   = N_temp_rots
+            self.RotationLoss  = torch.nn.CrossEntropyLoss()
             self.rot_pred_head = RotationPredHead(emb_dim=num_out_ch, N_temp_rots=self.N_temp_rots)
 
     def forward(self, A_l=None, B_l=None, target_l=None, B_l_r=None, target_l_r=None, A_ul=None, B_ul=None, target_ul=None, B_ul_r=None, target_ul_r=None, curr_iter=None, epoch=None):
@@ -155,6 +155,7 @@ class Consistency_ResNet50_CD(BaseModel):
                 z_b_ul_r    = self.encoder(B_ul_r)
                 r_l         = self.rot_pred_head(z_a_l, z_b_l_r)
                 r_ul        = self.rot_pred_head(z_a_ul, z_b_ul_r)
+        
                 loss_ss    = self.RotationLoss(r_l, target_l_r) + self.RotationLoss(r_ul, target_ul_r)
                 curr_losses['loss_ss'] = loss_ss
                 total_loss = total_loss + loss_ss
@@ -185,7 +186,7 @@ class Consistency_ResNet50_CD(BaseModel):
 
     def get_other_params(self):
         if self.mode == 'semi':
-            return chain(self.encoder.parameters(), self.DiffModule.parameters(), self.main_decoder.parameters(), 
+            return chain(self.DiffModule.parameters(), self.main_decoder.parameters(), 
                         self.aux_decoders.parameters(), self.rot_pred_head.parameters())
 
         return chain(self.encoder.parameters(), self.DiffModule.parameters(), self.main_decoder.parameters())

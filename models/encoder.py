@@ -61,7 +61,7 @@ class Encoder(nn.Module):
         return x
 
 class DiffModule(nn.Module):
-    def __init__(self, pretrained):
+    def __init__(self):
         super(DiffModule, self).__init__()
 
         self.psp = _PSPModule(2048, bin_sizes=[1, 2, 3, 6])
