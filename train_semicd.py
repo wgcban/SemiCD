@@ -23,6 +23,8 @@ def main(config, resume):
     config['train_supervised']['percnt_lbl'] = config["sup_percent"]
     config['train_unsupervised']['percnt_lbl'] = config["unsup_percent"]
     config['train_unsupervised']['use_weak_lables'] = config['use_weak_lables']
+    config['train_supervised']['N_temp_rots'] = config["N_temp_rots"]
+    config['train_unsupervised']['N_temp_rots'] = config["N_temp_rots"]
     supervised_loader = dataloaders.CDDataset(config['train_supervised'])
     unsupervised_loader = dataloaders.CDDataset(config['train_unsupervised'])
     val_loader = dataloaders.CDDataset(config['val_loader'])

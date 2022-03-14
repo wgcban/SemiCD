@@ -1,6 +1,6 @@
 {
-    "name": "SemiCD-LEVIR-CD",
-    "experim_name": "SemiCD_(semi)_5",
+    "name": "Temporal-Rotation-SS-LEVIR-CD",
+    "experim_name": "RoCo_5",
     "sup_percent":5,
     "unsup_percent":5,
     "n_total_lbl": 7120,
@@ -69,7 +69,6 @@
         "flip": true,
         "rotate": true,
         "blur": true,
-        "N_temp_rots": 4,
         "split": "train_supervised",
         "num_workers": 2
     },
@@ -86,7 +85,6 @@
         "flip": true,
         "rotate": true,
         "blur": true,
-        "N_temp_rots": 4,
         "split": "train_unsupervised",
         "num_workers": 2
     },
