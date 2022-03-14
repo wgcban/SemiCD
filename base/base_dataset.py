@@ -12,7 +12,7 @@ from math import ceil
 class BaseDataSet(Dataset):
     def __init__(self, data_dir, split, mean, std, base_size=None, augment=True, val=False,
                 jitter=False, use_weak_lables=False, weak_labels_output=None, crop_size=None, scale=False, flip=False, rotate=False,
-                blur=False, return_id=False, percnt_lbl=None):
+                blur=False, return_id=False, percnt_lbl=None, N_temp_rots=None):
 
         self.root = data_dir
         self.split = split
@@ -25,6 +25,7 @@ class BaseDataSet(Dataset):
         self.return_id = return_id
         self.percnt_lbl = percnt_lbl
         self.val = val
+        self.N_temp_rots = N_temp_rots
 
         self.use_weak_lables = use_weak_lables
         self.weak_labels_output = weak_labels_output
@@ -60,6 +61,17 @@ class BaseDataSet(Dataset):
         image = cv2.warpAffine(image, rot_matrix, (w, h), flags=cv2.INTER_CUBIC)#, borderMode=cv2.BORDER_REFLECT)
         label = cv2.warpAffine(label, rot_matrix, (w, h), flags=cv2.INTER_NEAREST)#,  borderMode=cv2.BORDER_REFLECT)
         return image, label            
+
+    def _temporal_rotation(self, image):
+        h, w, _ = image.shape
+
+        bin = random.randint(0, self.N_temp_rots)
+        angle   = 360*bin/self.N_temp_rots
+
+        center = (w / 2, h / 2)
+        rot_matrix = cv2.getRotationMatrix2D(center, angle, 1.0)
+        image = cv2.warpAffine(image, rot_matrix, (w, h), flags=cv2.INTER_CUBIC)#, borderMode=cv2.BORDER_REFLECT)
+        return image, bin
 
     def _crop(self, image_A, image_B, label):   
         # Padding to return the correct crop size
@@ -184,12 +196,20 @@ class BaseDataSet(Dataset):
             label = label[:,:,0]
         if self.val:
             image_A, image_B, label = self._val_augmentation(image_A, image_B, label)
+            
+            label[label>=1] = 1
+            label = torch.from_numpy(np.array(label, dtype=np.int32)).long()
+            
+            return image_A, image_B, label
         elif self.augment:
             image_A, image_B, label = self._augmentation(image_A, image_B, label)
-
-        label[label>=1] = 1
-        label = torch.from_numpy(np.array(label, dtype=np.int32)).long()
-        return image_A, image_B, label
+            
+            label[label>=1] = 1
+            label = torch.from_numpy(np.array(label, dtype=np.int32)).long()
+            
+            #Temporal rotation
+            image_B_R, label_R = self._temporal_rotation(image_B)
+            return image_A, image_B, label, image_B_R, label_R
 
     def __repr__(self):
         fmt_str = "Dataset: " + self.__class__.__name__ + "\n"

@@ -63,17 +63,17 @@ class Trainer(BaseTrainer):
         self._reset_metrics()
         for batch_idx in tbar:
             if self.mode == 'supervised':
-                (A_l, B_l, target_l), (A_ul, B_ul, target_ul) = next(dataloader), (None, None, None)
+                (A_l, B_l, target_l, B_l_r, target_l_r), (A_ul, B_ul, target_ul, B_ul_r, target_ul_r) = next(dataloader), (None, None, None, None, None)
             else:
-                (A_l, B_l, target_l), (A_ul, B_ul, target_ul) = next(dataloader)
-                A_ul, B_ul, target_ul = A_ul.cuda(non_blocking=True), B_ul.cuda(non_blocking=True), target_ul.cuda(non_blocking=True)
+                (A_l, B_l, target_l, B_l_r, target_l_r), (A_ul, B_ul, target_ul, B_ul_r, target_ul_r) = next(dataloader)
+                A_ul, B_ul, target_ul, B_ul_r, target_ul_r = A_ul.cuda(non_blocking=True), B_ul.cuda(non_blocking=True), target_ul.cuda(non_blocking=True), B_ul_r.cuda(non_blocking=True), target_ul_r.cuda(non_blocking=True)
 
 
-            A_l, B_l, target_l = A_l.cuda(non_blocking=True), B_l.cuda(non_blocking=True), target_l.cuda(non_blocking=True)
+            A_l, B_l, target_l, B_l_r, target_l_r = A_l.cuda(non_blocking=True), B_l.cuda(non_blocking=True), target_l.cuda(non_blocking=True), B_l_r.cuda(non_blocking=True), target_l_r.cuda(non_blocking=True)
             self.optimizer.zero_grad()
 
-            total_loss, cur_losses, outputs = self.model(A_l=A_l, B_l = B_l, target_l=target_l, A_ul=A_ul, B_ul=B_ul, 
-                                                        curr_iter=batch_idx, target_ul=target_ul, epoch=epoch-1)
+            total_loss, cur_losses, outputs = self.model(A_l=A_l, B_l = B_l, target_l=target_l, B_l_r=B_l_r, target_l_r=target_l_r, A_ul=A_ul, B_ul=B_ul, 
+                                                        curr_iter=batch_idx, target_ul=target_ul, B_ul_r=B_ul_r, target_ul_r=target_ul_r, epoch=epoch-1)
             total_loss = total_loss.mean()
             total_loss.backward()
             self.optimizer.step()

@@ -7,7 +7,9 @@ from base import BaseModel
 from utils.helpers import set_trainable
 from utils.losses import *
 from models.decoders import *
-from models.encoder import Encoder
+from models.encoder import Encoder, DiffModule
+from models.rotation import RotationPredHead
+
 from utils.losses import CE_loss
 
 class Consistency_ResNet50_CD(BaseModel):
@@ -24,6 +26,8 @@ class Consistency_ResNet50_CD(BaseModel):
             self.mode = 'supervised'
         else:
             self.mode = 'semi'
+
+        self.mode_ss = conf["self_sup"]
 
         # Supervised and unsupervised losses
         if conf['un_loss'] == "KL":
@@ -52,7 +56,8 @@ class Consistency_ResNet50_CD(BaseModel):
         self.confidence_masking = conf['confidence_masking']
 
         # Create the model
-        self.encoder = Encoder(pretrained=pretrained)
+        self.encoder    = Encoder(pretrained=pretrained)
+        self.DiffModule = DiffModule()
 
         # The main encoder
         upscale             = 8
@@ -81,16 +86,23 @@ class Consistency_ResNet50_CD(BaseModel):
 
             self.aux_decoders = nn.ModuleList([*vat_decoder, *drop_decoder, *cut_decoder,
                                     *context_m_decoder, *object_masking, *feature_drop, *feature_noise])
+        
+        if self.mode_ss:
+            print('Self supervised rotation prediction also innncluded in the semi-supervised CD.')
+            self.N_temp_rots = conf['N_temp_rots']
+            self.RotationLoss = torch.nn.CrossEntropyLoss()
+            self.rot_pred_head = RotationPredHead(emb_dim=num_out_ch, N_temp_rots=self.N_temp_rots)
 
-    def forward(self, A_l=None, B_l=None, target_l=None, A_ul=None, B_ul=None, target_ul=None, curr_iter=None, epoch=None):
+    def forward(self, A_l=None, B_l=None, target_l=None, B_l_r=None, target_l_r=None, A_ul=None, B_ul=None, target_ul=None, B_ul_r=None, target_ul_r=None, curr_iter=None, epoch=None):
         if not self.training:
-            return self.main_decoder(self.encoder(A_l, B_l))
+            return self.main_decoder(self.DiffModule(self.encoder(A_l), self.encoder(B_l)))
 
         # We compute the losses in the forward pass to avoid problems encountered in muti-gpu 
 
         # Forward pass the labels example
         input_size  = (A_l.size(2), A_l.size(3))
-        output_l    = self.main_decoder(self.encoder(A_l, B_l))
+        z_a_l, z_b_l= self.encoder(A_l), self.encoder(B_l)
+        output_l    = self.main_decoder(self.DiffModule(z_a_l, z_b_l))
         if output_l.shape != A_l.shape:
             output_l = F.interpolate(output_l, size=input_size, mode='bilinear', align_corners=True)
 
@@ -111,9 +123,10 @@ class Consistency_ResNet50_CD(BaseModel):
 
         # If semi supervised mode
         elif self.mode == 'semi':
-            # Get main prediction
-            x_ul      = self.encoder(A_ul, B_ul)
-            output_ul = self.main_decoder(x_ul)
+            # Get main prediction      
+            z_a_ul, z_b_ul  = self.encoder(A_ul), self.encoder(B_ul)
+            x_ul            = self.DiffModule(z_a_ul, z_b_ul)
+            output_ul       = self.main_decoder(x_ul)
 
             # Get auxiliary predictions
             outputs_ul = [aux_decoder(x_ul, output_ul.detach(), pertub=True) for aux_decoder in self.aux_decoders]
@@ -135,6 +148,16 @@ class Consistency_ResNet50_CD(BaseModel):
             loss_unsup  = loss_unsup * weight_u
             curr_losses['loss_unsup'] = loss_unsup
             total_loss  = loss_unsup  + loss_sup 
+
+            #Self-supervised rotation prediction
+            if self.mode_ss:
+                z_b_l_r     = self.encoder(B_l_r)
+                z_b_ul_r    = self.encoder(B_ul_r)
+                r_l         = self.rot_pred_head(z_a_l, z_b_l_r)
+                r_ul        = self.rot_pred_head(z_a_ul, z_b_ul_r)
+                loss_ss    = self.RotationLoss(r_l, target_l_r) + self.RotationLoss(r_ul, target_ul_r)
+                curr_losses['loss_ss'] = loss_ss
+                total_loss = total_loss + loss_ss
 
             # If case we're using weak lables, add the weak loss term with a weight (self.weakly_loss_w)
             outputs_ul_reshaped = []
@@ -158,12 +181,12 @@ class Consistency_ResNet50_CD(BaseModel):
             return total_loss, curr_losses, outputs
 
     def get_backbone_params(self):
-        return self.encoder.get_backbone_params()
+        return self.encoder.parameters()
 
     def get_other_params(self):
         if self.mode == 'semi':
-            return chain(self.encoder.get_module_params(), self.main_decoder.parameters(), 
-                        self.aux_decoders.parameters())
+            return chain(self.encoder.parameters(), self.DiffModule.parameters(), self.main_decoder.parameters(), 
+                        self.aux_decoders.parameters(), self.rot_pred_head.parameters())
 
-        return chain(self.encoder.get_module_params(), self.main_decoder.parameters())
+        return chain(self.encoder.parameters(), self.DiffModule.parameters(), self.main_decoder.parameters())
 

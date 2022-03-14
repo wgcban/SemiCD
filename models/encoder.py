@@ -56,15 +56,18 @@ class Encoder(nn.Module):
         )
         self.psp = _PSPModule(2048, bin_sizes=[1, 2, 3, 6])
 
-    def forward(self, A, B):
-        a = self.base(A)
-        b = self.base(B)
-        diff = torch.abs(a-b)
+    def forward(self, x):
+        x = self.base(x)
+        return x
+
+class DiffModule(nn.Module):
+    def __init__(self, pretrained):
+        super(DiffModule, self).__init__()
+
+        self.psp = _PSPModule(2048, bin_sizes=[1, 2, 3, 6])
+
+    def forward(self, z_a, z_b):
+        diff = torch.abs(z_a-z_b)
         x = self.psp(diff)
         return x
 
-    def get_backbone_params(self):
-        return self.base.parameters()
-
-    def get_module_params(self):
-        return self.psp.parameters()
