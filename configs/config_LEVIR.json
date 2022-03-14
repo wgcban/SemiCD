@@ -1,6 +1,6 @@
 {
     "name": "Temporal-Rotation-SS-LEVIR-CD",
-    "experim_name": "RoCo_5",
+    "experim_name": "RoCo(4bins)_5",
     "sup_percent":5,
     "unsup_percent":5,
     "n_total_lbl": 7120,
@@ -100,14 +100,14 @@
 
     "trainer": {
         "epochs": 80,
-        "save_dir": "/media/lidan/ssd2/SemiCD/saved/LEVIR-CD",
+        "save_dir": "/media/lidan/ssd2/SemiCD/saved/LEVIR-CD/RoCD",
         "save_period": 5,
   
         "monitor": "max Mean_IoU",
         "early_stop": 10,
         
         "tensorboardX": true,
-        "log_dir": "/media/lidan/ssd2/SemiCD/saved/LEVIR-CD",
+        "log_dir": "/media/lidan/ssd2/SemiCD/saved/LEVIR-CD/RoCD",
         "log_per_iter": 20,
 
         "val": true,

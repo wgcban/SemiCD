@@ -93,12 +93,12 @@ class Trainer(BaseTrainer):
             del total_loss, cur_losses, outputs
 
             if self.mode == 'supervised':
-                tbar.set_description('T ({}) | Ls {:.2f} Lu {:.2f} Lw {:.2f} PW {:.2f} IoU(change-l) {:.2f}|'.format(
-                epoch, self.loss_sup.average, self.loss_unsup.average, self.loss_weakly.average,
+                tbar.set_description('T ({}) | Ls {:.2f} Lu {:.2f} Lss {:.2f} Lw {:.2f} PW {:.2f} IoU(change-l) {:.2f}|'.format(
+                epoch, self.loss_sup.average, self.loss_unsup.average, self.loss_ss.average, self.loss_weakly.average,
                 self.pair_wise.average, self.class_iou_l[1]))
             else:
-                tbar.set_description('T ({}) | Ls {:.2f} Lu {:.2f} Lw {:.2f} PW {:.2f} IoU(change-l) {:.2f} IoU(change-ul) {:.2f}|'.format(
-                epoch, self.loss_sup.average, self.loss_unsup.average, self.loss_weakly.average,
+                tbar.set_description('T ({}) | Ls {:.2f} Lu {:.2f} Lss {:.2f} Lw {:.2f} PW {:.2f} IoU(change-l) {:.2f} IoU(change-ul) {:.2f}|'.format(
+                epoch, self.loss_sup.average, self.loss_unsup.average, self.loss_ss.average, self.loss_weakly.average,
                 self.pair_wise.average, self.class_iou_l[1], self.class_iou_ul[1]))
 
             self.lr_scheduler.step(epoch=epoch-1)
@@ -187,6 +187,7 @@ class Trainer(BaseTrainer):
         self.loss_unsup  = AverageMeter()
         self.loss_weakly = AverageMeter()
         self.pair_wise = AverageMeter()
+        self.loss_ss = AverageMeter()
         self.total_inter_l, self.total_union_l = 0, 0
         self.total_correct_l, self.total_label_l = 0, 0
         self.total_inter_ul, self.total_union_ul = 0, 0
@@ -206,6 +207,8 @@ class Trainer(BaseTrainer):
             self.loss_weakly.update(cur_losses['loss_weakly'].mean().item())
         if "pair_wise" in cur_losses.keys():
             self.pair_wise.update(cur_losses['pair_wise'].mean().item())
+        if "loss_ss" in cur_losses.keys():
+            self.pair_wise.update(cur_losses['loss_ss'].mean().item())
 
 
 
@@ -262,6 +265,8 @@ class Trainer(BaseTrainer):
             logs['loss_weakly'] = self.loss_weakly.average
         if "pair_wise" in cur_losses.keys():
             logs['pair_wise'] = self.pair_wise.average
+        if "loss_ss" in cur_losses.keys():
+            logs['loss_ss'] = self.loss_ss.average
 
         logs['mIoU_labeled'] = self.mIoU_l
         logs['pixel_acc_labeled'] = self.pixel_acc_l

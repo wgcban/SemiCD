@@ -1,1 +1,1 @@
-from .Consistency_ResNet50_CD import Consistency_ResNet50_CD
+from .ResNet50_CD import ResNet50_CD

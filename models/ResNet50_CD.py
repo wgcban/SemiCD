@@ -12,7 +12,7 @@ from models.rotation import RotationPredHead
 
 from utils.losses import CE_loss
 
-class Consistency_ResNet50_CD(BaseModel):
+class ResNet50_CD(BaseModel):
     def __init__(self, num_classes, conf, sup_loss=None, cons_w_unsup=None, testing=False,
             pretrained=True, use_weak_lables=False, weakly_loss_w=0.4, N_temp_rots=None):
 
@@ -20,7 +20,7 @@ class Consistency_ResNet50_CD(BaseModel):
         if not testing:
             assert (sup_loss is not None) and (cons_w_unsup is not None)
 
-        super(Consistency_ResNet50_CD, self).__init__()
+        super(ResNet50_CD, self).__init__()
         assert int(conf['supervised']) + int(conf['semi']) == 1, 'one mode only'
         if conf['supervised']:
             self.mode = 'supervised'
