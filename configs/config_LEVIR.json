@@ -12,6 +12,7 @@
     "use_weak_lables":false,
     "weakly_loss_w": 0.4,
     "pretrained": true,
+    
     "N_temp_rots": 8,
     "weight_ss": 0.2,
 
@@ -61,7 +62,7 @@
 
     "train_supervised": {
         "data_dir": "/media/lidan/ssd2/CDData/LEVIR-CD256",
-        "batch_size": 8,
+        "batch_size": 16,
         "crop_size": 256,
         "shuffle": true,
         "base_size": 256,
@@ -70,6 +71,7 @@
         "flip": true,
         "rotate": true,
         "blur": true,
+        "jitter": true,
         "split": "train_supervised",
         "num_workers": 2
     },
@@ -77,7 +79,7 @@
     "train_unsupervised": {
         "data_dir": "/media/lidan/ssd2/CDData/LEVIR-CD256",
         "weak_labels_output": "pseudo_labels",
-        "batch_size": 8,
+        "batch_size": 16,
         "crop_size": 256,
         "shuffle": true,
         "base_size": 256,
@@ -86,6 +88,7 @@
         "flip": true,
         "rotate": true,
         "blur": true,
+        "jitter": true,
         "split": "train_unsupervised",
         "num_workers": 2
     },

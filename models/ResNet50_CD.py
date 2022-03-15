@@ -97,7 +97,6 @@ class ResNet50_CD(BaseModel):
     def forward(self, A_l=None, B_l=None, target_l=None, A_l_r=None, B_l_r=None, target_l_r=None, A_ul=None, B_ul=None, target_ul=None, A_ul_r=None, B_ul_r=None, target_ul_r=None, curr_iter=None, epoch=None):
         if not self.training:
             return self.main_decoder(self.DiffModule(self.encoder(A_l), self.encoder(B_l)))
-
         # We compute the losses in the forward pass to avoid problems encountered in muti-gpu 
 
         # Forward pass the labels example

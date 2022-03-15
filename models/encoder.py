@@ -54,7 +54,6 @@ class Encoder(nn.Module):
             model.layer3,
             model.layer4
         )
-        self.psp = _PSPModule(2048, bin_sizes=[1, 2, 3, 6])
 
     def forward(self, x):
         x = self.base(x)

@@ -38,7 +38,7 @@ class BaseDataSet(Dataset):
             self.rotate = rotate
             self.blur = blur
 
-        self.jitter_tf = transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1, hue=0.1)
+        self.jitter_tf = transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.3)
         self.to_tensor = transforms.ToTensor()
         self.normalize = transforms.Normalize(mean, std)
 
@@ -66,7 +66,7 @@ class BaseDataSet(Dataset):
     def _temporal_rotation(self, image1, image2):
         h, w, _ = image1.shape
 
-        bin = random.randint(0, self.N_temp_rots-1)
+        bin     = random.randint(0, self.N_temp_rots-1)
         angle   = 360*bin/self.N_temp_rots
 
         image1 = transforms.functional.rotate(image1, angle=angle, fill=0.0)
