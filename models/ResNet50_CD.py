@@ -101,9 +101,8 @@ class ResNet50_CD(BaseModel):
         # We compute the losses in the forward pass to avoid problems encountered in muti-gpu 
 
         # Forward pass the labels example
-        input_size  = (A_l.size(2), A_l.size(3))
-        z_a_l, z_b_l= self.encoder(A_l), self.encoder(B_l)
-        output_l    = self.main_decoder(self.DiffModule(z_a_l, z_b_l))
+        input_size  = (A_l.size(2), A_l.size(3)) 
+        output_l    = self.main_decoder(self.DiffModule(self.encoder(A_l), self.encoder(B_l)))
         if output_l.shape != A_l.shape:
             output_l = F.interpolate(output_l, size=input_size, mode='bilinear', align_corners=True)
 
@@ -115,18 +114,32 @@ class ResNet50_CD(BaseModel):
         else:
             loss_sup = self.sup_loss(output_l, target_l, curr_iter=curr_iter, epoch=epoch) * self.sup_loss_w
 
+        # Self-supervised rotation prediction
+        if self.mode_ss:
+            z_a_l_r     = self.encoder(A_l_r)
+            z_b_l_r     = self.encoder(B_l_r)
+            z_a_ul_r    = self.encoder(A_ul_r)
+            z_b_ul_r    = self.encoder(B_ul_r)
+            r_l         = self.rot_pred_head(z_a_l_r, z_b_l_r)
+            r_ul        = self.rot_pred_head(z_a_ul_r, z_b_ul_r)
+        
+            loss_ss    = self.RotationLoss(r_l, target_l_r) + self.RotationLoss(r_ul, target_ul_r)
+            curr_losses= {'loss_ss': self.weight_ss*loss_ss}
+            total_loss = loss_ss
+        else:
+            total_loss = 0.0
+
         # If supervised mode only, return
-        if self.mode == 'supervised':
+        if self.mode    == 'supervised':
             curr_losses = {'loss_sup': loss_sup}
-            outputs = {'sup_pred': output_l}
-            total_loss = loss_sup
+            outputs     = {'sup_pred': output_l}
+            total_loss  += loss_sup
             return total_loss, curr_losses, outputs
 
         # If semi supervised mode
         elif self.mode == 'semi':
             # Get main prediction      
-            z_a_ul, z_b_ul  = self.encoder(A_ul), self.encoder(B_ul)
-            x_ul            = self.DiffModule(z_a_ul, z_b_ul)
+            x_ul            = self.DiffModule(self.encoder(A_ul), self.encoder(B_ul))
             output_ul       = self.main_decoder(x_ul)
 
             # Get auxiliary predictions
@@ -148,20 +161,7 @@ class ResNet50_CD(BaseModel):
             weight_u    = self.unsup_loss_w(epoch=epoch, curr_iter=curr_iter)
             loss_unsup  = loss_unsup * weight_u
             curr_losses['loss_unsup'] = loss_unsup
-            total_loss  = loss_unsup  + loss_sup 
-
-            #Self-supervised rotation prediction
-            if self.mode_ss:
-                z_a_l_r     = self.encoder(A_l_r)
-                z_b_l_r     = self.encoder(B_l_r)
-                z_a_ul_r    = self.encoder(A_ul_r)
-                z_b_ul_r    = self.encoder(B_ul_r)
-                r_l         = self.rot_pred_head(z_a_l_r, z_b_l_r)
-                r_ul        = self.rot_pred_head(z_a_ul_r, z_b_ul_r)
-        
-                loss_ss    = self.RotationLoss(r_l, target_l_r) + self.RotationLoss(r_ul, target_ul_r)
-                curr_losses['loss_ss'] = self.weight_ss*loss_ss
-                total_loss += loss_ss
+            total_loss  = loss_unsup  + loss_sup
 
             # If case we're using weak lables, add the weak loss term with a weight (self.weakly_loss_w)
             outputs_ul_reshaped = []
@@ -189,8 +189,15 @@ class ResNet50_CD(BaseModel):
 
     def get_other_params(self):
         if self.mode == 'semi':
-            return chain(self.DiffModule.parameters(), self.main_decoder.parameters(), 
+            if self.mode_ss:
+                return chain(self.DiffModule.parameters(), self.main_decoder.parameters(), 
                         self.aux_decoders.parameters(), self.rot_pred_head.parameters())
-
-        return chain(self.encoder.parameters(), self.DiffModule.parameters(), self.main_decoder.parameters())
+            else:
+                return chain(self.DiffModule.parameters(), self.main_decoder.parameters(), 
+                        self.aux_decoders.parameters())
+        else:
+            if self.mode_ss:
+                return chain(self.encoder.parameters(), self.DiffModule.parameters(), self.main_decoder.parameters(), self.rot_pred_head.parameters())
+            else:
+                return chain(self.encoder.parameters(), self.DiffModule.parameters(), self.main_decoder.parameters())
 
