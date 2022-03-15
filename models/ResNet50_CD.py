@@ -123,15 +123,17 @@ class ResNet50_CD(BaseModel):
             r_l         = self.rot_pred_head(z_a_l_r, z_b_l_r)
             r_ul        = self.rot_pred_head(z_a_ul_r, z_b_ul_r)
         
-            loss_ss    = self.RotationLoss(r_l, target_l_r) + self.RotationLoss(r_ul, target_ul_r)
-            curr_losses= {'loss_ss': self.weight_ss*loss_ss}
+            loss_ss    = self.weight_ss*(self.RotationLoss(r_l, target_l_r) + self.RotationLoss(r_ul, target_ul_r))
+            curr_losses= {'loss_ss': loss_ss}
             total_loss = loss_ss
         else:
+            loss_ss    = 0.0
             total_loss = 0.0
+            curr_losses= {'loss_ss': loss_ss}
 
         # If supervised mode only, return
         if self.mode    == 'supervised':
-            curr_losses = {'loss_sup': loss_sup}
+            curr_losses['loss_sup'] = loss_sup
             outputs     = {'sup_pred': output_l}
             total_loss  += loss_sup
             return total_loss, curr_losses, outputs
