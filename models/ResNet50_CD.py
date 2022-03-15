@@ -197,7 +197,7 @@ class ResNet50_CD(BaseModel):
                         self.aux_decoders.parameters())
         else:
             if self.mode_ss:
-                return chain(self.encoder.parameters(), self.DiffModule.parameters(), self.main_decoder.parameters(), self.rot_pred_head.parameters())
+                return chain(self.DiffModule.parameters(), self.main_decoder.parameters(), self.rot_pred_head.parameters())
             else:
-                return chain(self.encoder.parameters(), self.DiffModule.parameters(), self.main_decoder.parameters())
+                return chain(self.DiffModule.parameters(), self.main_decoder.parameters())
 
