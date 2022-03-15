@@ -63,17 +63,18 @@ class Trainer(BaseTrainer):
         self._reset_metrics()
         for batch_idx in tbar:
             if self.mode == 'supervised':
-                (A_l, B_l, target_l, B_l_r, target_l_r), (A_ul, B_ul, target_ul, B_ul_r, target_ul_r) = next(dataloader), (None, None, None, None, None)
+                (A_l, B_l, target_l, A_l_r, B_l_r, target_l_r), (A_ul, B_ul, target_ul, A_ul_r, B_ul_r, target_ul_r) = next(dataloader), (None, None, None, None, None, None)
             else:
-                (A_l, B_l, target_l, B_l_r, target_l_r), (A_ul, B_ul, target_ul, B_ul_r, target_ul_r) = next(dataloader)
-                A_ul, B_ul, target_ul, B_ul_r, target_ul_r = A_ul.cuda(non_blocking=True), B_ul.cuda(non_blocking=True), target_ul.cuda(non_blocking=True), B_ul_r.cuda(non_blocking=True), target_ul_r.cuda(non_blocking=True)
+                (A_l, B_l, target_l, A_l_r, B_l_r, target_l_r), (A_ul, B_ul, target_ul, A_ul_r, B_ul_r, target_ul_r) = next(dataloader)
+                A_ul, B_ul, target_ul, A_ul_r, B_ul_r, target_ul_r = A_ul.cuda(non_blocking=True), B_ul.cuda(non_blocking=True), target_ul.cuda(non_blocking=True), A_ul_r.cuda(non_blocking=True), B_ul_r.cuda(non_blocking=True), target_ul_r.cuda(non_blocking=True)
 
 
-            A_l, B_l, target_l, B_l_r, target_l_r = A_l.cuda(non_blocking=True), B_l.cuda(non_blocking=True), target_l.cuda(non_blocking=True), B_l_r.cuda(non_blocking=True), target_l_r.cuda(non_blocking=True)
+            A_l, B_l, target_l, A_l_r, B_l_r, target_l_r = A_l.cuda(non_blocking=True), B_l.cuda(non_blocking=True), target_l.cuda(non_blocking=True), A_l_r.cuda(non_blocking=True), B_l_r.cuda(non_blocking=True), target_l_r.cuda(non_blocking=True)
             self.optimizer.zero_grad()
 
-            total_loss, cur_losses, outputs = self.model(A_l=A_l, B_l = B_l, target_l=target_l, B_l_r=B_l_r, target_l_r=target_l_r, A_ul=A_ul, B_ul=B_ul, 
-                                                        curr_iter=batch_idx, target_ul=target_ul, B_ul_r=B_ul_r, target_ul_r=target_ul_r, epoch=epoch-1)
+            total_loss, cur_losses, outputs = self.model(A_l=A_l, B_l = B_l, target_l=target_l, A_l_r=A_l_r, B_l_r=B_l_r, target_l_r=target_l_r, A_ul=A_ul, B_ul=B_ul, 
+                                                            target_ul=target_ul, A_ul_r=A_ul_r, B_ul_r=B_ul_r, target_ul_r=target_ul_r, curr_iter=batch_idx, epoch=epoch-1)
+
             total_loss = total_loss.mean()
             total_loss.backward()
             self.optimizer.step()
@@ -87,9 +88,9 @@ class Trainer(BaseTrainer):
                 self._write_scalars_tb(logs)
 
             if batch_idx % int(len(self.unsupervised_loader)*0.9) == 0:
-                self._write_img_tb(A_l, B_l, target_l, A_ul, B_ul, target_ul, outputs, epoch)
+                self._write_img_tb(A_l, B_l, target_l, A_ul, B_ul, target_ul, outputs, A_l_r, B_l_r, A_ul_r, B_ul_r, epoch)
 
-            del A_l, B_l, target_l, A_ul, B_ul, target_ul
+            del A_l, B_l, target_l, A_l_r, B_l_r, target_l_r, A_ul, B_ul, A_ul_r, B_ul_r, target_ul_r
             del total_loss, cur_losses, outputs
 
             if self.mode == 'supervised':
@@ -301,15 +302,15 @@ class Trainer(BaseTrainer):
 
 
     
-    def _write_img_tb(self, A_l, B_l, target_l, A_ul, B_ul, target_ul, outputs, epoch):
+    def _write_img_tb(self, A_l, B_l, target_l, A_ul, B_ul, target_ul, outputs, A_l_r, B_l_r, A_ul_r, B_ul_r, epoch):
         outputs_l_np = outputs['sup_pred'].data.max(1)[1].cpu().numpy()
         targets_l_np = target_l.data.cpu().numpy()
-        imgs = [[i.data.cpu(), j.data.cpu(), k, l] for i, j, k, l in zip(A_l, B_l, outputs_l_np, targets_l_np)]
+        imgs = [[i.data.cpu(), j.data.cpu(), k, l, m.data.cpu(), n.data.cpu()] for i, j, k, l, m, n in zip(A_l, B_l, outputs_l_np, targets_l_np, A_l_r, B_l_r)]
         self._add_img_tb(imgs, 'supervised')
 
         if self.mode == 'semi':
             outputs_ul_np = outputs['unsup_pred'].data.max(1)[1].cpu().numpy()
             targets_ul_np = target_ul.data.cpu().numpy()
-            imgs = [[i.data.cpu(), j.data.cpu(), k, l] for i, j, k, l in zip(A_ul, B_ul, outputs_ul_np, targets_ul_np)]
+            imgs = [[i.data.cpu(), j.data.cpu(), k, l, m.cpu(), n.data.cpu()] for i, j, k, l, m, n in zip(A_ul, B_ul, outputs_ul_np, targets_ul_np, A_ul_r, B_ul_r)]
             self._add_img_tb(imgs, 'unsupervised')
 

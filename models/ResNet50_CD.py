@@ -94,7 +94,7 @@ class ResNet50_CD(BaseModel):
             self.RotationLoss  = torch.nn.CrossEntropyLoss()
             self.rot_pred_head = RotationPredHead(emb_dim=num_out_ch, N_temp_rots=self.N_temp_rots)
 
-    def forward(self, A_l=None, B_l=None, target_l=None, B_l_r=None, target_l_r=None, A_ul=None, B_ul=None, target_ul=None, B_ul_r=None, target_ul_r=None, curr_iter=None, epoch=None):
+    def forward(self, A_l=None, B_l=None, target_l=None, A_l_r=None, B_l_r=None, target_l_r=None, A_ul=None, B_ul=None, target_ul=None, A_ul_r=None, B_ul_r=None, target_ul_r=None, curr_iter=None, epoch=None):
         if not self.training:
             return self.main_decoder(self.DiffModule(self.encoder(A_l), self.encoder(B_l)))
 
@@ -152,14 +152,16 @@ class ResNet50_CD(BaseModel):
 
             #Self-supervised rotation prediction
             if self.mode_ss:
+                z_a_l_r     = self.encoder(A_l_r)
                 z_b_l_r     = self.encoder(B_l_r)
+                z_a_ul_r    = self.encoder(A_ul_r)
                 z_b_ul_r    = self.encoder(B_ul_r)
-                r_l         = self.rot_pred_head(z_a_l, z_b_l_r)
-                r_ul        = self.rot_pred_head(z_a_ul, z_b_ul_r)
+                r_l         = self.rot_pred_head(z_a_l_r, z_b_l_r)
+                r_ul        = self.rot_pred_head(z_a_ul_r, z_b_ul_r)
         
                 loss_ss    = self.RotationLoss(r_l, target_l_r) + self.RotationLoss(r_ul, target_ul_r)
                 curr_losses['loss_ss'] = self.weight_ss*loss_ss
-                total_loss = total_loss + loss_ss
+                total_loss += loss_ss
 
             # If case we're using weak lables, add the weak loss term with a weight (self.weakly_loss_w)
             outputs_ul_reshaped = []

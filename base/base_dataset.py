@@ -63,14 +63,16 @@ class BaseDataSet(Dataset):
         label = cv2.warpAffine(label, rot_matrix, (w, h), flags=cv2.INTER_NEAREST)#,  borderMode=cv2.BORDER_REFLECT)
         return image, label            
 
-    def _temporal_rotation(self, image):
-        h, w, _ = image.shape
+    def _temporal_rotation(self, image1, image2):
+        h, w, _ = image1.shape
 
         bin = random.randint(0, self.N_temp_rots-1)
         angle   = 360*bin/self.N_temp_rots
 
-        image = transforms.functional.rotate(image, angle=angle)
-        return image, bin
+        image1 = transforms.functional.rotate(image1, angle=angle, fill=0.0)
+        image1 = transforms.functional.rotate(image1, angle=-angle, fill=0.0)
+        image2 = transforms.functional.rotate(image2, angle=angle, fill=0.0)
+        return image1, image2, bin
 
     def _crop(self, image_A, image_B, label):   
         # Padding to return the correct crop size
@@ -207,8 +209,8 @@ class BaseDataSet(Dataset):
             label = torch.from_numpy(np.array(label, dtype=np.int32)).long()
             
             #Temporal rotation
-            image_B_R, label_R = self._temporal_rotation(image_B)
-            return image_A, image_B, label, image_B_R, label_R
+            image_A_R, image_B_R, label_R = self._temporal_rotation(image_A, image_B)
+            return image_A, image_B, label, image_A_R, image_B_R, label_R
 
     def __repr__(self):
         fmt_str = "Dataset: " + self.__class__.__name__ + "\n"

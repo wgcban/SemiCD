@@ -12,7 +12,7 @@
     "use_weak_lables":false,
     "weakly_loss_w": 0.4,
     "pretrained": true,
-    "N_temp_rots": 18,
+    "N_temp_rots": 8,
     "weight_ss": 0.2,
 
     "model":{
