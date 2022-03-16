@@ -38,7 +38,7 @@ class BaseDataSet(Dataset):
             self.rotate = rotate
             self.blur = blur
 
-        self.jitter_tf = transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.3)
+        self.jitter_tf = transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.2)
         self.to_tensor = transforms.ToTensor()
         self.normalize = transforms.Normalize(mean, std)
 
