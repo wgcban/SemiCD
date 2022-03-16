@@ -14,7 +14,7 @@ from tqdm import tqdm
 from PIL import Image
 from utils.helpers import DeNormalize
 import torch.nn as nn
-from models.decoders import MainDecoder
+from models.decoder import MainDecoder
 
 
 class Trainer(BaseTrainer):
