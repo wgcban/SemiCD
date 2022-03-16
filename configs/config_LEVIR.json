@@ -6,7 +6,7 @@
     "n_gpu": 1,
     "diff_lrs": true,
     "ramp_up": 0.05,
-    "unsupervised_w": 30,
+    "unsupervised_w": 2,
     "lr_scheduler": "Poly",
     "use_weak_lables":false,
     "weakly_loss_w": 0.4,
@@ -43,7 +43,7 @@
         "blur": true,
         "jitter": true,
         "split": "train_supervised",
-        "num_workers": 2
+        "num_workers": 4
     },
 
     "train_unsupervised": {
@@ -59,7 +59,7 @@
         "blur": true,
         "jitter": true,
         "split": "train_unsupervised",
-        "num_workers": 2
+        "num_workers": 4
     },
 
     "val_loader": {
