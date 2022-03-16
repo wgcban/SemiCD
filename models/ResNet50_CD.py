@@ -44,7 +44,7 @@ class ResNet50_RoCD(BaseModel):
         upscale             = 8
         num_out_ch          = 2048
         decoder_in_ch       = num_out_ch // 4
-        self.main_decoder   = MainDecoder(upscale, decoder_in_ch, num_classes=num_classes)
+        self.main_decoder   = ConvDecoder(upscale, decoder_in_ch, num_classes=num_classes)
 
         # Initializing the rotation prediction task
         if self.mode == 'semi':

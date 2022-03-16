@@ -14,7 +14,7 @@ from tqdm import tqdm
 from PIL import Image
 from utils.helpers import DeNormalize
 import torch.nn as nn
-from models.decoder import MainDecoder
+from models.decoder import PixelShuffle
 
 
 class Trainer(BaseTrainer):

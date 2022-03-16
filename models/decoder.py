@@ -79,11 +79,38 @@ def upsample(in_channels, out_channels, upscale, kernel_size=3):
     return nn.Sequential(*layers)
 
 
-class MainDecoder(nn.Module):
+class PixShuffleDecoder(nn.Module):
     def __init__(self, upscale, conv_in_ch, num_classes):
-        super(MainDecoder, self).__init__()
+        super(PixShuffleDecoder, self).__init__()
+        print(upscale)
         self.upsample = upsample(conv_in_ch, num_classes, upscale=upscale)
 
     def forward(self, x):
         x = self.upsample(x)
+        return x
+
+
+# Convolutional Decoder
+class TwoLayerConv2d(nn.Sequential):
+    def __init__(self, in_channels, out_channels, kernel_size=3):
+        super().__init__(nn.Conv2d(in_channels, in_channels, kernel_size=kernel_size,
+                            padding=kernel_size // 2, stride=1, bias=False),
+                         nn.BatchNorm2d(in_channels),
+                         nn.ReLU(),
+                         nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size,
+                            padding=kernel_size // 2, stride=1)
+                         )
+
+class ConvDecoder(nn.Module):
+    def __init__(self, upscale, conv_in_ch, num_classes):
+        super(ConvDecoder, self).__init__()
+        print(upscale)
+        self.diff_conv  = TwoLayerConv2d(in_channels=conv_in_ch, out_channels=32)
+        self.upsample   = nn.Upsample(scale_factor=upscale, mode='bilinear')
+        self.classifier = TwoLayerConv2d(in_channels=32, out_channels=num_classes)
+
+    def forward(self, x):
+        x = self.diff_conv(x)
+        x = self.upsample(x)
+        x = self.classifier(x)
         return x
