@@ -8,7 +8,7 @@ from utils.helpers import set_trainable
 from utils.losses import *
 from models.decoder import *
 from models.encoder import Encoder, DiffModule
-from models.rotation import RotationPredHead
+from models.rotation import RotationPredHead, RotationPredHeadSim
 
 from utils.losses import CE_loss
 
@@ -50,7 +50,7 @@ class ResNet50_RoCD(BaseModel):
         if self.mode == 'semi':
             print('>>> Self-supervised temporal rotation prediction for semi-supervised CD <<<')
             self.N_temp_rots   = N_temp_rots
-            self.rot_pred_head = RotationPredHead(emb_dim=num_out_ch, N_temp_rots=self.N_temp_rots)
+            self.rot_pred_head = RotationPredHeadSim(emb_dim=num_out_ch, N_temp_rots=self.N_temp_rots)
 
     def forward(self, A_l=None, B_l=None, target_l=None, A_l_r=None, B_l_r=None, target_l_r=None, A_ul=None, B_ul=None, target_ul=None, A_ul_r=None, B_ul_r=None, target_ul_r=None, curr_iter=None, epoch=None):
         if not self.training:
