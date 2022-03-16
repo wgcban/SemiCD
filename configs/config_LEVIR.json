@@ -14,8 +14,8 @@
     "N_temp_rots": 8,
 
     "model":{
-        "supervised": true,
-        "semi": false,
+        "supervised": false,
+        "semi": true,
 
         "supervised_w": 5,
         "sup_loss": "CE"

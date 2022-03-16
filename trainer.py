@@ -34,7 +34,6 @@ class Trainer(BaseTrainer):
 
         self.num_classes = self.val_loader.dataset.num_classes
         self.mode = self.model.module.mode
-        self.mode_ss = config['model']['self_sup']
 
         # TRANSORMS FOR VISUALIZATION
         self.restore_transform = transforms.Compose([
@@ -55,12 +54,8 @@ class Trainer(BaseTrainer):
         self.model.train()
 
         if self.mode == 'supervised':
-            if self.mode_ss:
-                dataloader  = iter(zip(cycle(self.supervised_loader), self.unsupervised_loader))
-                tbar        = tqdm(range(len(self.unsupervised_loader)), ncols=100)
-            else:
-                dataloader  = iter(self.supervised_loader)
-                tbar        = tqdm(range(len(self.supervised_loader)), ncols=100)
+            dataloader  = iter(self.supervised_loader)
+            tbar        = tqdm(range(len(self.supervised_loader)), ncols=100)
         else:
             dataloader      = iter(zip(cycle(self.supervised_loader), self.unsupervised_loader))
             tbar            = tqdm(range(len(self.unsupervised_loader)), ncols=100)
@@ -68,11 +63,7 @@ class Trainer(BaseTrainer):
         self._reset_metrics()
         for batch_idx in tbar:
             if self.mode == 'supervised':
-                if self.mode_ss:
-                    (A_l, B_l, target_l, A_l_r, B_l_r, target_l_r), (A_ul, B_ul, target_ul, A_ul_r, B_ul_r, target_ul_r) = next(dataloader)
-                    A_ul, B_ul, target_ul, A_ul_r, B_ul_r, target_ul_r = A_ul.cuda(non_blocking=True), B_ul.cuda(non_blocking=True), target_ul.cuda(non_blocking=True), A_ul_r.cuda(non_blocking=True), B_ul_r.cuda(non_blocking=True), target_ul_r.cuda(non_blocking=True)
-                else:
-                    (A_l, B_l, target_l, A_l_r, B_l_r, target_l_r), (A_ul, B_ul, target_ul, A_ul_r, B_ul_r, target_ul_r) = next(dataloader), (None, None, None, None, None, None)
+                (A_l, B_l, target_l, A_l_r, B_l_r, target_l_r), (A_ul, B_ul, target_ul, A_ul_r, B_ul_r, target_ul_r) = next(dataloader), (None, None, None, None, None, None)
             else:
                 (A_l, B_l, target_l, A_l_r, B_l_r, target_l_r), (A_ul, B_ul, target_ul, A_ul_r, B_ul_r, target_ul_r) = next(dataloader)
                 A_ul, B_ul, target_ul, A_ul_r, B_ul_r, target_ul_r = A_ul.cuda(non_blocking=True), B_ul.cuda(non_blocking=True), target_ul.cuda(non_blocking=True), A_ul_r.cuda(non_blocking=True), B_ul_r.cuda(non_blocking=True), target_ul_r.cuda(non_blocking=True)

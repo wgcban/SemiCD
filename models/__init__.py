@@ -1,1 +1,1 @@
-from .ResNet50_CD import ResNet50_CD
+from .ResNet50_CD import ResNet50_RoCD

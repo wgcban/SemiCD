@@ -33,7 +33,6 @@ class ResNet50_RoCD(BaseModel):
         self.unsup_loss_w   = cons_w_unsup
         self.sup_loss_w     = conf['supervised_w']
         
-        self.softmax_temp   = conf['softmax_temp']
         self.sup_loss       = sup_loss
         self.sup_type       = conf['sup_loss']
 
@@ -66,28 +65,11 @@ class ResNet50_RoCD(BaseModel):
 
         # Supervised loss
         if self.sup_type == 'CE':
-            loss_sup = self.sup_loss(output_l, target_l, temperature=self.softmax_temp) * self.sup_loss_w 
+            loss_sup = self.sup_loss(output_l, target_l, temperature=1.0) * self.sup_loss_w 
         elif self.sup_type == 'FL':
             loss_sup = self.sup_loss(output_l,target_l) * self.sup_loss_w
         else:
             loss_sup = self.sup_loss(output_l, target_l, curr_iter=curr_iter, epoch=epoch) * self.sup_loss_w
-
-        # Self-supervised rotation prediction
-        if self.mode_ss:
-            z_a_l_r     = self.encoder(A_l_r)
-            z_b_l_r     = self.encoder(B_l_r)
-            z_a_ul_r    = self.encoder(A_ul_r)
-            z_b_ul_r    = self.encoder(B_ul_r)
-            r_l         = self.rot_pred_head(z_a_l_r, z_b_l_r)
-            r_ul        = self.rot_pred_head(z_a_ul_r, z_b_ul_r)
-        
-            loss_ss    = self.weight_ss*(self.RotationLoss(r_l, target_l_r) + self.RotationLoss(r_ul, target_ul_r))
-            curr_losses= {'loss_ss': loss_ss}
-            total_loss = loss_ss
-        else:
-            loss_ss    = 0.0
-            total_loss = 0.0
-            curr_losses= {'loss_ss': loss_ss}
 
         # If supervised mode only, return
         if self.mode    == 'supervised':

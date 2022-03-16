@@ -20,7 +20,7 @@ def main(config, resume):
     train_logger = Logger()
 
     # PROJECT NAME
-    config["experim_name"] =  "RoCo_" + "bins" + config["N_temp_rots"] + "_sup(" + config["model"]["supervised"] + ")"
+    config["experim_name"] =  "RoCo_" + "bins" + str(config["N_temp_rots"]) + "_sup(" + str(config["model"]["supervised"]) + ")" + "_semi(" + str(config["model"]["semi"]) + ")"
     
     # DATA LOADERS
     config['train_supervised']['percnt_lbl'] = config["sup_percent"]
@@ -49,7 +49,7 @@ def main(config, resume):
     cons_w_unsup = consistency_weight(final_w=config['unsupervised_w'], iters_per_epoch=len(unsupervised_loader),
                                         rampup_ends=rampup_ends)
 
-    model = models.ResNet50_CD(num_classes=val_loader.dataset.num_classes, conf=config['model'],
+    model = models.ResNet50_RoCD(num_classes=val_loader.dataset.num_classes, conf=config['model'],
     						sup_loss=sup_loss, cons_w_unsup=cons_w_unsup, N_temp_rots=config['N_temp_rots'])
 
     print(f'\n{model}\n')

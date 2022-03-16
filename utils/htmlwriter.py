@@ -52,9 +52,6 @@ class HTML:
                     td(f'Lr scheduler : {config["lr_scheduler"]}')
                     td(f'Lr : {config["optimizer"]["args"]["lr"]}')
                     if "datasets" in list(config.keys()): td(f'Datasets : {config["datasets"]}')
-                    td(f"""Decoders : Vat {conf_model["vat"]} Dropout {conf_model["drop"]} Cutout {conf_model["cutout"]}
-                                     FeatureNoise {conf_model["feature_noise"]} FeatureDrop {conf_model["feature_drop"]}
-                                     ContextMsk {conf_model["context_masking"]} ObjMsk {conf_model["object_masking"]}""")
         if "datasets" in list(config.keys()):
             self.doc.add(p(json.dumps(config[config["datasets"]], indent=4, sort_keys=True)))
         else:
