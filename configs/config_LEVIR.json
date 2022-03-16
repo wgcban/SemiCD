@@ -5,11 +5,9 @@
     "n_total_lbl": 7120,
     "n_gpu": 1,
     "diff_lrs": true,
-    "ramp_up": 0.05,
-    "unsupervised_w": 0.5,
+    "ramp_up": 0.1,
+    "unsupervised_w": 0.3,
     "lr_scheduler": "Poly",
-    "use_weak_lables":false,
-    "weakly_loss_w": 0.4,
     "pretrained": true,
     "N_temp_rots": 8,
 

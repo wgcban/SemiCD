@@ -32,7 +32,7 @@ class RotationPredHeadSim(nn.Module):
         self.linear1    = torch.nn.Linear(self.N**4, 64)
         self.relu       = torch.nn.ReLU()
         self.linear2    = torch.nn.Linear(64, N_temp_rots)
-        self.N_feat     = 16
+        self.N_feat     = 1
 
     def forward(self, z_a, z_b):
         b, c, h , w = z_a.size()
