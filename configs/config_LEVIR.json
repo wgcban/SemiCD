@@ -17,7 +17,7 @@
         "supervised": false,
         "semi": true,
 
-        "supervised_w": 5,
+        "supervised_w": 1,
         "sup_loss": "CE"
         },
 
