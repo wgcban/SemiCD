@@ -8,6 +8,8 @@ import contextlib
 import random
 import numpy as np
 import cv2
+from torchvision import transforms
+
 
 class RotationPredHead(nn.Module):
     def __init__(self, emb_dim, N_temp_rots):
@@ -26,16 +28,30 @@ class RotationPredHead(nn.Module):
 class RotationPredHeadSim(nn.Module):
     def __init__(self, emb_dim, N_temp_rots):
         super(RotationPredHeadSim, self).__init__()
+        self.N_temp_rots = N_temp_rots
+
         self.N          = 8
+
         self.pool       = torch.nn.AdaptiveAvgPool2d(self.N)
         self.softmax    = torch.nn.Softmax(dim=1)
         self.linear1    = torch.nn.Linear(self.N**4, 64)
         self.relu       = torch.nn.ReLU()
         self.linear2    = torch.nn.Linear(64, N_temp_rots)
-        self.N_feat     = 1
+        self.N_feat     = 8
 
-    def forward(self, z_a, z_b):
+    def forward(self, z_a, z_b, cm, target_l_r):
         b, c, h , w = z_a.size()
+
+        #Get the actual angle and rotate the predicted mask according to that
+        angle   = 360*target_l_r/self.N_temp_rots
+
+        cm_r = cm.unsqueeze(1)
+        for i in range(b):
+            cm_r[i] = transforms.functional.rotate(cm[i].unsqueeze(0), angle=angle[i].item(), fill=0.0)
+        
+        #Apply change mask on
+        z_a     = z_a*(1.0-torch.nn.functional.interpolate(cm_r, size=[h,w], mode='nearest'))
+        z_b     = z_b*(1.0-torch.nn.functional.interpolate(cm_r, size=[h,w], mode='nearest'))
         
         loc = torch.randint(c, (self.N_feat,))
 
