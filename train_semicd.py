@@ -18,11 +18,14 @@ def get_instance(module, name, config, *args):
 def main(config, resume):
     torch.manual_seed(42)
     train_logger = Logger()
+
+    # PROJECT NAME
+    config["experim_name"] =  "RoCo_" + "bins" + config["N_temp_rots"] + "_sup(" + config["model"]["supervised"] + ")"
     
     # DATA LOADERS
     config['train_supervised']['percnt_lbl'] = config["sup_percent"]
     config['train_unsupervised']['percnt_lbl'] = config["unsup_percent"]
-    config['train_unsupervised']['use_weak_lables'] = config['use_weak_lables']
+    
     config['train_supervised']['N_temp_rots'] = config["N_temp_rots"]
     config['train_unsupervised']['N_temp_rots'] = config["N_temp_rots"]
     supervised_loader = dataloaders.CDDataset(config['train_supervised'])
@@ -47,8 +50,8 @@ def main(config, resume):
                                         rampup_ends=rampup_ends)
 
     model = models.ResNet50_CD(num_classes=val_loader.dataset.num_classes, conf=config['model'],
-    						sup_loss=sup_loss, cons_w_unsup=cons_w_unsup,
-    						weakly_loss_w=config['weakly_loss_w'], use_weak_lables=config['use_weak_lables'], weight_ss=config['weight_ss'], N_temp_rots=config['N_temp_rots'])
+    						sup_loss=sup_loss, cons_w_unsup=cons_w_unsup, N_temp_rots=config['N_temp_rots'])
+
     print(f'\n{model}\n')
 
     # TRAINING

@@ -1,6 +1,5 @@
 {
-    "name": "Temporal-Rotation-SS-LEVIR-CD",
-    "experim_name": "RoCo_bins16_semi_sup5",
+    "name": "ReCO",
     "sup_percent":5,
     "unsup_percent":5,
     "n_total_lbl": 7120,
