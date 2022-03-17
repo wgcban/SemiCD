@@ -54,7 +54,7 @@ class RotationPredHeadSim(nn.Module):
         p_c_r    = torch.zeros_like(p_c) #change map with rotation
         p_c_nr   = torch.zeros_like(p_c) #chang map wihout rotation
         for i in range(b):
-            p_c_r[i] = transforms.functional.rotate(p_c[i].unsqueeze(0), angle=angle[i].item(), fill=1.0)
+            p_c_r[i]  = transforms.functional.rotate(p_c[i].unsqueeze(0), angle=angle[i].item(), fill=1.0)
             p_c_nr[i] = transforms.functional.rotate(p_c_r[i].unsqueeze(0), angle=-angle[i].item(), fill=1.0)
         
         #Apply change mask on
