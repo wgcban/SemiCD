@@ -89,7 +89,7 @@ class ResNet50_RoCD(BaseModel):
 
             # Rotation prediction for semi-supevised learning
             r_l         = self.rot_pred_head(self.encoder(A_l_r), self.encoder(B_l_r), cm_l, target_l_r)
-            r_ul        = self.rot_pred_head(self.encoder(A_ul_r), self.encoder(B_ul_r), cm_ul, target_l_r)
+            r_ul        = self.rot_pred_head(self.encoder(A_ul_r), self.encoder(B_ul_r), cm_ul, target_ul_r)
             loss_unsup  = self.RotationLoss(r_l, target_l_r) + self.RotationLoss(r_ul, target_ul_r)
             
             # Supervised loss
