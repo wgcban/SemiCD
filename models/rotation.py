@@ -48,12 +48,12 @@ class RotationPredHeadSim(nn.Module):
         cm_r    = cm.unsqueeze(1) #change map with rotation
         cm_nr   = cm.unsqueeze(1) #chang map wihout rotation
         for i in range(b):
-            cm_r[i] = transforms.functional.rotate(cm[i].unsqueeze(0), angle=angle[i].item(), fill=0.0)
-            cm_nr[i] = transforms.functional.rotate(cm_r[i].unsqueeze(0), angle=-angle[i].item(), fill=0.0)
+            cm_r[i] = transforms.functional.rotate(cm[i].unsqueeze(0), angle=angle[i].item(), fill=1.0)
+            cm_nr[i] = transforms.functional.rotate(cm_r[i].unsqueeze(0), angle=-angle[i].item(), fill=1.0)
         
         #Apply change mask on
-        z_a     = z_a*(torch.nn.functional.interpolate(cm_nr, size=[h,w], mode='nearest'))
-        z_b     = z_b*(torch.nn.functional.interpolate(cm_r, size=[h,w], mode='nearest'))
+        z_a     = z_a*(1.0-torch.nn.functional.interpolate(cm_nr, size=[h,w], mode='nearest'))
+        z_b     = z_b*(1.0-torch.nn.functional.interpolate(cm_r, size=[h,w], mode='nearest'))
         
         loc = torch.randint(c, (self.N_feat,))
 
