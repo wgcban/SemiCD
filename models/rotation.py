@@ -39,31 +39,40 @@ class RotationPredHeadSim(nn.Module):
         self.linear2    = torch.nn.Linear(64, N_temp_rots)
         self.N_feat     = 8
 
-    def forward(self, z_a, z_b, cm, target_l_r):
+        self.softmax    = torch.nn.Softmax(dim=1)
+
+    def forward(self, z_a, z_b, output, target_l_r):
         b, c, h , w = z_a.size()
+
+        #Convert predictions to probabilities through softmax and selecting change probability map
+        p_c = self.softmax(output)[:,1,:,:].unsqueeze(1)
 
         #Get the actual angle and rotate the predicted mask according to that
         angle   = 360*target_l_r/self.N_temp_rots
 
-        cm_r    = cm.unsqueeze(1) #change map with rotation
-        cm_nr   = cm.unsqueeze(1) #chang map wihout rotation
+        #Rotated change probability map
+        p_c_r    = torch.zeros_like(p_c) #change map with rotation
+        p_c_nr   = torch.zeros_like(p_c) #chang map wihout rotation
         for i in range(b):
-            cm_r[i] = transforms.functional.rotate(cm[i].unsqueeze(0), angle=angle[i].item(), fill=1.0)
-            cm_nr[i] = transforms.functional.rotate(cm_r[i].unsqueeze(0), angle=-angle[i].item(), fill=1.0)
+            p_c_r[i] = transforms.functional.rotate(p_c[i].unsqueeze(0), angle=angle[i].item(), fill=1.0)
+            p_c_nr[i] = transforms.functional.rotate(p_c_r[i].unsqueeze(0), angle=-angle[i].item(), fill=1.0)
         
         #Apply change mask on
-        z_a     = z_a*(1.0-torch.nn.functional.interpolate(cm_nr, size=[h,w], mode='nearest'))
-        z_b     = z_b*(1.0-torch.nn.functional.interpolate(cm_r, size=[h,w], mode='nearest'))
+        z_a     = z_a*(1.0-torch.nn.functional.interpolate(p_c_nr, size=[h,w], mode='bilinear'))
+        z_b     = z_b*(1.0-torch.nn.functional.interpolate(p_c_r, size=[h,w], mode='bilinear'))
         
+        #Determine which features should select randomely for rotation prediction
         loc = torch.randint(c, (self.N_feat,))
-
         z_ar = z_a[:, loc, :, :]
         z_br = z_b[:, loc, :, :]
 
+        #Randomely selected features for rotation prediction
         z_ar = self.pool(z_ar).view(b, self.N_feat, self.N**2)
         z_br = self.pool(z_br).view(b, self.N_feat, self.N**2)
 
+        #Calculating Similarity matric between each feature and taking softmax for neumerical stability
         C = self.softmax(torch.bmm(z_ar.permute(0, 2, 1), z_br))
 
+        #Final rotation prediction head
         r = self.linear2(self.relu(self.linear1(C.view(b, self.N**4))))
         return r

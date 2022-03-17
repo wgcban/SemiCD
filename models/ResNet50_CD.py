@@ -63,8 +63,6 @@ class ResNet50_RoCD(BaseModel):
         output_l    = self.main_decoder(self.DiffModule(self.encoder(A_l), self.encoder(B_l)))
         if output_l.shape != A_l.shape:
             output_l = F.interpolate(output_l, size=input_size, mode='bilinear', align_corners=True)
-        #Compute the ratget
-        cm_l = output_l.detach().argmax(1).to(torch.float32)
 
         # Supervised loss
         if self.sup_type == 'CE':
@@ -85,12 +83,10 @@ class ResNet50_RoCD(BaseModel):
         elif self.mode == 'semi':
             # Get prediction for unlabeled data
             output_ul   = self.main_decoder(self.DiffModule(self.encoder(A_ul), self.encoder(B_ul)))
-            # Generate targets
-            cm_ul   = output_ul.detach().argmax(1).to(torch.float32)
 
             # Rotation prediction for semi-supevised learning
-            r_l         = self.rot_pred_head(self.Rotation_encoder(A_l_r), self.Rotation_encoder(B_l_r), cm_l, target_l_r)
-            r_ul        = self.rot_pred_head(self.Rotation_encoder(A_ul_r), self.Rotation_encoder(B_ul_r), cm_ul, target_ul_r)
+            r_l         = self.rot_pred_head(self.Rotation_encoder(A_l_r), self.Rotation_encoder(B_l_r), output_l, target_l_r)
+            r_ul        = self.rot_pred_head(self.Rotation_encoder(A_ul_r), self.Rotation_encoder(B_ul_r), output_ul, target_ul_r)
             loss_unsup  = self.RotationLoss(r_l, target_l_r) + self.RotationLoss(r_ul, target_ul_r)
             
             # Supervised loss
@@ -115,7 +111,7 @@ class ResNet50_RoCD(BaseModel):
     def get_other_params(self):
         if self.mode == 'semi':
             return chain(self.DiffModule.parameters(), self.main_decoder.parameters(), 
-                        self.rot_pred_head.parameters())
+                        self.Rotation_encoder.parameters(), self.rot_pred_head.parameters())
         else:
             return chain(self.DiffModule.parameters(), self.main_decoder.parameters())
 
