@@ -2,7 +2,7 @@
     "name": "ReCO",
     "sup_percent":5,
     "unsup_percent":5,
-    "n_total_lbl": 7120,
+    "n_total_lbl": 14400,
     "n_gpu": 1,
     "diff_lrs": true,
     "ramp_up": 0.1,
