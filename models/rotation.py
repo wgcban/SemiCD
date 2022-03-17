@@ -44,7 +44,7 @@ class RotationPredHeadSim(nn.Module):
     def forward(self, z_a, z_b, output, target_l_r):
         b, c, h , w = z_a.size()
 
-        #Convert predictions to probabilities through softmax and selecting change probability map
+        #Convert predictions to probabilities through softmax and selecting change probability
         p_c = self.softmax(output)[:,1,:,:].unsqueeze(1)
 
         #Get the actual angle and rotate the predicted mask according to that
@@ -61,14 +61,14 @@ class RotationPredHeadSim(nn.Module):
         z_a     = z_a*(1.0-torch.nn.functional.interpolate(p_c_nr, size=[h,w], mode='bilinear'))
         z_b     = z_b*(1.0-torch.nn.functional.interpolate(p_c_r, size=[h,w], mode='bilinear'))
         
-        #Determine which features should select randomely for rotation prediction
-        loc = torch.randint(c, (self.N_feat,))
-        z_ar = z_a[:, loc, :, :]
-        z_br = z_b[:, loc, :, :]
+        # Determine which features should select randomely for rotation prediction
+        # loc = torch.randint(c, (self.N_feat,))
+        # z_ar = z_a[:, loc, :, :]
+        # z_br = z_b[:, loc, :, :]
 
         #Randomely selected features for rotation prediction
-        z_ar = self.pool(z_ar).view(b, self.N_feat, self.N**2)
-        z_br = self.pool(z_br).view(b, self.N_feat, self.N**2)
+        z_ar = self.pool(z_a).view(b, self.N_feat, self.N**2)
+        z_br = self.pool(z_b).view(b, self.N_feat, self.N**2)
 
         #Calculating Similarity matric between each feature and taking softmax for neumerical stability
         C = self.softmax(torch.bmm(z_ar.permute(0, 2, 1), z_br))

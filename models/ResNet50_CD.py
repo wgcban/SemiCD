@@ -50,7 +50,6 @@ class ResNet50_RoCD(BaseModel):
         if self.mode == 'semi':
             print('>>> Self-supervised temporal rotation prediction for semi-supervised CD <<<')
             self.N_temp_rots    = N_temp_rots
-            self.Rotation_encoder = Encoder(pretrained=pretrained)
             self.rot_pred_head  = RotationPredHeadSim(emb_dim=num_out_ch, N_temp_rots=self.N_temp_rots)
 
     def forward(self, A_l=None, B_l=None, target_l=None, A_l_r=None, B_l_r=None, target_l_r=None, A_ul=None, B_ul=None, target_ul=None, A_ul_r=None, B_ul_r=None, target_ul_r=None, curr_iter=None, epoch=None):
@@ -85,8 +84,8 @@ class ResNet50_RoCD(BaseModel):
             output_ul   = self.main_decoder(self.DiffModule(self.encoder(A_ul), self.encoder(B_ul)))
 
             # Rotation prediction for semi-supevised learning
-            r_l         = self.rot_pred_head(self.Rotation_encoder(A_l_r), self.Rotation_encoder(B_l_r), output_l, target_l_r)
-            r_ul        = self.rot_pred_head(self.Rotation_encoder(A_ul_r), self.Rotation_encoder(B_ul_r), output_ul, target_ul_r)
+            r_l         = self.rot_pred_head(self.encoder(A_l_r), self.encoder(B_l_r), output_l, target_l_r)
+            r_ul        = self.rot_pred_head(self.encoder(A_ul_r), self.encoder(B_ul_r), output_ul, target_ul_r)
             loss_unsup  = self.RotationLoss(r_l, target_l_r) + self.RotationLoss(r_ul, target_ul_r)
             
             # Supervised loss
@@ -111,7 +110,7 @@ class ResNet50_RoCD(BaseModel):
     def get_other_params(self):
         if self.mode == 'semi':
             return chain(self.DiffModule.parameters(), self.main_decoder.parameters(), 
-                        self.Rotation_encoder.parameters(), self.rot_pred_head.parameters())
+            self.rot_pred_head.parameters())
         else:
             return chain(self.DiffModule.parameters(), self.main_decoder.parameters())
 
