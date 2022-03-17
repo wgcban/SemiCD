@@ -102,7 +102,7 @@ class ResNet50_RoCD(BaseModel):
 
             # Compute the unsupervised loss
             weight_u    = self.unsup_loss_w(epoch=epoch, curr_iter=curr_iter)
-            loss_unsup  = loss_unsup * weight_u
+            loss_unsup  = -loss_unsup * weight_u
             curr_losses['loss_unsup'] = loss_unsup
             total_loss  = loss_unsup  + loss_sup
 
