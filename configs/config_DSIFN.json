@@ -6,7 +6,7 @@
     "n_gpu": 1,
     "diff_lrs": true,
     "ramp_up": 0.1,
-    "unsupervised_w": 0.5,
+    "unsupervised_w": 0.05,
     "lr_scheduler": "Poly",
     "pretrained": true,
     "N_temp_rots": 8,
