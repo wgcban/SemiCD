@@ -1,6 +1,5 @@
 ## SS-CD: Semi-Supervised Change Detection in Remote Sensing Images via Consistency Regularization
-
-Under review at ECCV-22.
+[Wele Gedara Chaminda Bandara](https://www.wgcban.com/), and [Vishal M. Patel](https://engineering.jhu.edu/vpatel36/sciencex_teams/vishalpatel/)
 
 #### [Paper]()
 
