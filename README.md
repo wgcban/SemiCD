@@ -1,4 +1,4 @@
-## SS-CD: Semi-Supervised Change Detection in Remote Sensing Images via Consistency Regularization
+## Revisiting Consistency Regularization for Semi-supervised Change Detection in Remote Sensing Images
 [Wele Gedara Chaminda Bandara](https://www.wgcban.com/), and [Vishal M. Patel](https://engineering.jhu.edu/vpatel36/sciencex_teams/vishalpatel/)
 
 #### [Paper]()
