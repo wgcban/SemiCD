@@ -102,7 +102,7 @@ Here are the flags available for inference:
 --config       The config file used for training the model.
 ```
 
-## Pre-trained models on
+## Pre-trained models
 
 Pre-trained models can be downloaded from the following links.
 
