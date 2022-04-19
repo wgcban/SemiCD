@@ -67,7 +67,7 @@ python train.py --config configs/config_WHU.json
 ### Training with cross-domain data (i.e., LEVIR as supervised and WHU as unsupervised datasets)
 In this case we use LEVIR-CD as the supervised dataset and WHU-CD as the unsupervised dataset. Therefore, you need to update the ``train_supervised`` ``data_dir``  as the path to LEVIR-CD dataset, and ``train_unsupervised`` ``data_dir``  as the path to WHU-CD dataset in ``config_LEVIR-sup_WHU-unsup.json``. Then change the ``sup_percent`` in the config file as you want and then simply run:
 ```bash
-python train.py --config configs/config_LEVIR-sup_WHU-unsup.json.json
+python train.py --config configs/config_LEVIR-sup_WHU-unsup.json
 ```
 
 ### Monitoring the training log via TensorBoard
