@@ -1,7 +1,7 @@
 ## Revisiting Consistency Regularization for Semi-supervised Change Detection in Remote Sensing Images
 [Wele Gedara Chaminda Bandara](https://www.wgcban.com/), and [Vishal M. Patel](https://engineering.jhu.edu/vpatel36/sciencex_teams/vishalpatel/)
 
-#### [Paper]()
+#### [Paper](https://arxiv.org/abs/2204.08454)
 
 This repocitory contains the official implementation of our paper:  **Revisiting Consistency Regularization for Semi-supervised Change Detection in Remote Sensing Images**.
 
@@ -117,7 +117,14 @@ Pre-trained models for cross-dataset experiments can be downloaded from [here](h
 If you find this repo useful for your research, please consider citing the paper as follows:
 
 ```
-Will update soon.
+@misc{bandara2022revisiting,
+      title={Revisiting Consistency Regularization for Semi-supervised Change Detection in Remote Sensing Images}, 
+      author={Wele Gedara Chaminda Bandara and Vishal M. Patel},
+      year={2022},
+      eprint={2204.08454},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
 
 ```
 
