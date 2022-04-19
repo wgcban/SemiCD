@@ -18,7 +18,7 @@ conda create -n SemiCD python=3.8
 
 conda activate SemiCD
 
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 ## Datasets
