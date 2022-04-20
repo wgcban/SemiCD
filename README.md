@@ -10,7 +10,7 @@
  [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/revisiting-consistency-regularization-for-1/semi-supervised-change-detection-on-whu-40)](https://paperswithcode.com/sota/semi-supervised-change-detection-on-whu-40?p=revisiting-consistency-regularization-for-1)
  
 
-#### [Paper](https://arxiv.org/abs/2204.08454)
+### [View paper here](https://arxiv.org/abs/2204.08454)  [View project page here](https://www.wgcban.com/research#h.ar24vwqlm021)
 
 This repocitory contains the official implementation of our paper:  **Revisiting Consistency Regularization for Semi-supervised Change Detection in Remote Sensing Images**.
 
