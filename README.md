@@ -32,7 +32,7 @@ conda activate SemiCD
 pip3 install -r requirements.txt
 ```
 
-## Datasets
+## :speech_balloon: Datasets
 We use two publicly available, widely-used CD datasets for our experiments, namely [LEVIR-CD](https://justchenhao.github.io/LEVIR/) and [WHU-CD](http://gpcv.whu.edu.cn/data/building_dataset.html). Note that LEVIR-CD and WHU-CD are building CD datasets.
 
 As we described in the paper, following previous works [ChangeFormer](https://github.com/wgcban/ChangeFormer) and [BIT-CD](https://github.com/justchenhao/BIT_CD) on supervised CD, we create non-overlapping patches of size 256x256 for the training. The dataset preparation codes are written in MATLAB and can be found in ``dataset_preperation`` folder. These scripts will also generate the supervised and unsupervised training scripts that we used to train the model under diffrent percentage of labeled data.
@@ -43,11 +43,11 @@ The processed LEVIR-CD dataset, and supervised-unsupervised splits can be downlo
 
 The processed WHU-CD dataset, and supervised-unsupervised splits can be downloaded [here](https://www.dropbox.com/sh/5qdnav1w7pmd74t/AABx_mLdj1MHj1SP2Djxgdf1a?dl=0).
 
-## Training
+## :speech_balloon: Training
 
 To train a model, first download processed dataset above and save them in any directory you want, then set `data_dir` to the dataset path in the config file in ``configs/config_LEVIR.json``/``configs/config_WHU.json`` and set the rest of the parameters, like ``experim_name``, ``sup_percent``, ``unsup_percent``, ``supervised``, ``semi``, ``save_dir``, ``log_dir`` ... etc., more details below. 
 
-### Training on LEVIR-CD dataset
+### :point_right: Training on LEVIR-CD dataset
 Then simply run:
 ```bash
 python train.py --config configs/config_LEVIR.json
@@ -68,20 +68,20 @@ The following table summarizes the **required changes** in ``config`` file to tr
 | Semi-upervised - 20% labeled data | Experiment name: `SemiCD_(semi)_20`, sup_percent= `20`, model.supervised=`Flase`, model.semi=`True` |
 | Semi-upervised - 40% labeled data | Experiment name: `SemiCD_(semi)_40`, sup_percent= `40`, model.supervised=`Flase`, model.semi=`True` |
 
-### Training on WHU-CD dataset
+### :point_right: Training on WHU-CD dataset
 Please follow the same changes that we outlined above to WHU-CD dataset as well. 
 Then simply run:
 ```bash
 python train.py --config configs/config_WHU.json
 ```
 
-### Training with cross-domain data (i.e., LEVIR as supervised and WHU as unsupervised datasets)
+### :point_right: Training with cross-domain data (i.e., LEVIR as supervised and WHU as unsupervised datasets)
 In this case we use LEVIR-CD as the supervised dataset and WHU-CD as the unsupervised dataset. Therefore, you need to update the ``train_supervised`` ``data_dir``  as the path to LEVIR-CD dataset, and ``train_unsupervised`` ``data_dir``  as the path to WHU-CD dataset in ``config_LEVIR-sup_WHU-unsup.json``. Then change the ``sup_percent`` in the config file as you want and then simply run:
 ```bash
 python train.py --config configs/config_LEVIR-sup_WHU-unsup.json
 ```
 
-### Monitoring the training log via TensorBoard
+### :point_right: Monitoring the training log via TensorBoard
 The log files and the `.pth` checkpoints will be saved in `saved\EXP_NAME`, to monitor the training using tensorboard, please run:
 
 ```bash
@@ -97,7 +97,7 @@ python train.py --config configs/config_LEVIR.json --resume saved/SemiCD/checkpo
 **Results**: The results will be saved in `saved` as an html file, containing the validation results,
 and the name it will take is `experim_name` specified in `configs/config_LEVIR.json`.
 
-## Inference
+## :speech_balloon: Inference
 
 For inference, we need a pretrained model, the pre-chage and pos-change imags that we wouldlike to dtet changes and the config used in training (to load the correct model and other parameters), 
 
@@ -113,7 +113,7 @@ Here are the flags available for inference:
 --config       The config file used for training the model.
 ```
 
-## Pre-trained models
+## :speech_balloon: Pre-trained models
 
 Pre-trained models can be downloaded from the following links.
 
@@ -123,7 +123,7 @@ Pre-trained models on WHU-CD can be downloaded from [here](https://www.dropbox.c
 
 Pre-trained models for cross-dataset experiments can be downloaded from [here](https://www.dropbox.com/sh/mvszluw944jvhc3/AAB-eR-stgVsjmNSvzZ5Hlqqa?dl=0).
 
-## Citation
+## :speech_balloon: Citation
 
 If you find this repo useful for your research, please consider citing the paper as follows:
 
