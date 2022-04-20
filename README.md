@@ -12,7 +12,7 @@
 
 :open_book:	:open_book:	 :open_book:	:open_book:	 View paper [here](https://arxiv.org/abs/2204.08454) 
 
-:bookmark: :bookmark: :bookmark: View project page [here](https://www.wgcban.com/research#h.ar24vwqlm021) ooo
+:bookmark: :bookmark: :bookmark: View project page [here](https://www.wgcban.com/research#h.ar24vwqlm021)
 
 This repocitory contains the official implementation of our paper:  **Revisiting Consistency Regularization for Semi-supervised Change Detection in Remote Sensing Images**.
 
