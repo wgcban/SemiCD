@@ -1,7 +1,14 @@
 ## Revisiting Consistency Regularization for Semi-supervised Change Detection in Remote Sensing Images
 [Wele Gedara Chaminda Bandara](https://www.wgcban.com/), and [Vishal M. Patel](https://engineering.jhu.edu/vpatel36/sciencex_teams/vishalpatel/)
 
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/revisiting-consistency-regularization-for-1/semi-supervised-change-detection-on-levir-cd-1)](https://paperswithcode.com/sota/semi-supervised-change-detection-on-levir-cd-1?p=revisiting-consistency-regularization-for-1) 
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/revisiting-consistency-regularization-for-1/semi-supervised-change-detection-on-levir-cd)](https://paperswithcode.com/sota/semi-supervised-change-detection-on-levir-cd?p=revisiting-consistency-regularization-for-1)
+ [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/revisiting-consistency-regularization-for-1/semi-supervised-change-detection-on-levir-cd-1)](https://paperswithcode.com/sota/semi-supervised-change-detection-on-levir-cd-1?p=revisiting-consistency-regularization-for-1) [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/revisiting-consistency-regularization-for-1/semi-supervised-change-detection-on-levir-cd-2)](https://paperswithcode.com/sota/semi-supervised-change-detection-on-levir-cd-2?p=revisiting-consistency-regularization-for-1) [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/revisiting-consistency-regularization-for-1/semi-supervised-change-detection-on-levir-cd-3)](https://paperswithcode.com/sota/semi-supervised-change-detection-on-levir-cd-3?p=revisiting-consistency-regularization-for-1)
+ 
+ [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/revisiting-consistency-regularization-for-1/semi-supervised-change-detection-on-whu-5)](https://paperswithcode.com/sota/semi-supervised-change-detection-on-whu-5?p=revisiting-consistency-regularization-for-1)
+ [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/revisiting-consistency-regularization-for-1/semi-supervised-change-detection-on-whu-10)](https://paperswithcode.com/sota/semi-supervised-change-detection-on-whu-10?p=revisiting-consistency-regularization-for-1)
+ [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/revisiting-consistency-regularization-for-1/semi-supervised-change-detection-on-whu-20)](https://paperswithcode.com/sota/semi-supervised-change-detection-on-whu-20?p=revisiting-consistency-regularization-for-1)
+ [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/revisiting-consistency-regularization-for-1/semi-supervised-change-detection-on-whu-40)](https://paperswithcode.com/sota/semi-supervised-change-detection-on-whu-40?p=revisiting-consistency-regularization-for-1)
+ 
 
 #### [Paper](https://arxiv.org/abs/2204.08454)
 
