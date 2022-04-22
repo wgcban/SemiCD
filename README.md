@@ -39,9 +39,9 @@ As we described in the paper, following previous works [ChangeFormer](https://gi
 
 **Instead, you can directely download the processed LEVIR-CD and WHU-CD through the following links. Save these datasets anywhere you want and change the ``data_dir`` to each dataset in the corresponding ``config`` file.**
 
-The processed LEVIR-CD dataset, and supervised-unsupervised splits can be downloaded [here](https://www.dropbox.com/sh/qxp2t98qpesouiy/AAD1Xr7-XPajzvyQfzPA1LKAa?dl=0).
+The processed LEVIR-CD dataset, and supervised-unsupervised splits can be downloaded [here](https://www.dropbox.com/s/18fb5jo0npu5evm/LEVIR-CD256.zip?dl=0).
 
-The processed WHU-CD dataset, and supervised-unsupervised splits can be downloaded [here](https://www.dropbox.com/sh/5qdnav1w7pmd74t/AABx_mLdj1MHj1SP2Djxgdf1a?dl=0).
+The processed WHU-CD dataset, and supervised-unsupervised splits can be downloaded [here](https://www.dropbox.com/s/r76a00jcxp5d3hl/WHU-CD-256.zip?dl=0).
 
 ## :speech_balloon: Training
 
