@@ -10,9 +10,9 @@
  [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/revisiting-consistency-regularization-for-1/semi-supervised-change-detection-on-whu-40)](https://paperswithcode.com/sota/semi-supervised-change-detection-on-whu-40?p=revisiting-consistency-regularization-for-1)
  
 
-:open_book:	:open_book:	 :open_book:	:open_book:	 View paper [here](https://arxiv.org/abs/2204.08454).
+:open_book:	:open_book:	 :open_book:	:open_book:	 View paper [`here`](https://arxiv.org/abs/2204.08454).
 
-:bookmark: :bookmark: :bookmark: View project page [here](https://www.wgcban.com/research#h.ar24vwqlm021).
+:bookmark: :bookmark: :bookmark: View project page [`here`](https://www.wgcban.com/research#h.ar24vwqlm021).
 
 This repocitory contains the official implementation of our paper:  **Revisiting Consistency Regularization for Semi-supervised Change Detection in Remote Sensing Images**.
 
@@ -33,15 +33,15 @@ pip3 install -r requirements.txt
 ```
 
 ## :speech_balloon: Datasets
-We use two publicly available, widely-used CD datasets for our experiments, namely [LEVIR-CD](https://justchenhao.github.io/LEVIR/) and [WHU-CD](http://gpcv.whu.edu.cn/data/building_dataset.html). Note that LEVIR-CD and WHU-CD are building CD datasets.
+We use two publicly available, widely-used CD datasets for our experiments, namely [`LEVIR-CD`](https://justchenhao.github.io/LEVIR/) and [`WHU-CD`](http://gpcv.whu.edu.cn/data/building_dataset.html). Note that LEVIR-CD and WHU-CD are building CD datasets.
 
-As we described in the paper, following previous works [ChangeFormer](https://github.com/wgcban/ChangeFormer) and [BIT-CD](https://github.com/justchenhao/BIT_CD) on supervised CD, we create non-overlapping patches of size 256x256 for the training. The dataset preparation codes are written in MATLAB and can be found in ``dataset_preperation`` folder. These scripts will also generate the supervised and unsupervised training scripts that we used to train the model under diffrent percentage of labeled data.
+As we described in the paper, following previous works [`ChangeFormer`](https://github.com/wgcban/ChangeFormer) and [`BIT-CD`](https://github.com/justchenhao/BIT_CD) on supervised CD, we create non-overlapping patches of size 256x256 for the training. The dataset preparation codes are written in MATLAB and can be found in ``dataset_preperation`` folder. These scripts will also generate the supervised and unsupervised training scripts that we used to train the model under diffrent percentage of labeled data.
 
 **Instead, you can directely download the processed LEVIR-CD and WHU-CD through the following links. Save these datasets anywhere you want and change the ``data_dir`` to each dataset in the corresponding ``config`` file.**
 
-The processed LEVIR-CD dataset, and supervised-unsupervised splits can be downloaded [here](https://www.dropbox.com/s/18fb5jo0npu5evm/LEVIR-CD256.zip?dl=0).
+The processed LEVIR-CD dataset, and supervised-unsupervised splits can be downloaded [`here`](https://www.dropbox.com/s/18fb5jo0npu5evm/LEVIR-CD256.zip?dl=0).
 
-The processed WHU-CD dataset, and supervised-unsupervised splits can be downloaded [here](https://www.dropbox.com/s/r76a00jcxp5d3hl/WHU-CD-256.zip?dl=0).
+The processed WHU-CD dataset, and supervised-unsupervised splits can be downloaded [`here`](https://www.dropbox.com/s/r76a00jcxp5d3hl/WHU-CD-256.zip?dl=0).
 
 ## :speech_balloon: Training
 
@@ -117,11 +117,11 @@ Here are the flags available for inference:
 
 Pre-trained models can be downloaded from the following links.
 
-Pre-trained models on LEVIR-CD can be downloaded from [here](https://www.dropbox.com/sh/0m8t6dq37f11ukx/AAAgTgIxr_eyJJeHWqZ_SRVYa?dl=0). 
+Pre-trained models on LEVIR-CD can be downloaded from [`here`](https://www.dropbox.com/sh/0m8t6dq37f11ukx/AAAgTgIxr_eyJJeHWqZ_SRVYa?dl=0). 
 
-Pre-trained models on WHU-CD can be downloaded from [here](https://www.dropbox.com/sh/oyn3d8hyz6qnzm5/AAAct3ueZ39xYINQbbO0oSJ_a?dl=0). 
+Pre-trained models on WHU-CD can be downloaded from [`here`](https://www.dropbox.com/sh/oyn3d8hyz6qnzm5/AAAct3ueZ39xYINQbbO0oSJ_a?dl=0). 
 
-Pre-trained models for cross-dataset experiments can be downloaded from [here](https://www.dropbox.com/sh/mvszluw944jvhc3/AAB-eR-stgVsjmNSvzZ5Hlqqa?dl=0).
+Pre-trained models for cross-dataset experiments can be downloaded from [`here`](https://www.dropbox.com/sh/mvszluw944jvhc3/AAB-eR-stgVsjmNSvzZ5Hlqqa?dl=0).
 
 ## :speech_balloon: Citation
 
